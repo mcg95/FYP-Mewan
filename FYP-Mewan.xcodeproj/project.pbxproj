@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		420FAB18B4BDC56752A58B68 /* Pods_FYP_MewanTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD12081CAE1BDB2A9178EEF /* Pods_FYP_MewanTests.framework */; };
 		717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F03209A035D00B44878 /* AppDelegate.swift */; };
 		717A4F06209A035D00B44878 /* Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F05209A035D00B44878 /* Scene.sks */; };
 		717A4F08209A035D00B44878 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F07209A035D00B44878 /* Scene.swift */; };
@@ -16,6 +17,13 @@
 		717A4F12209A036100B44878 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F10209A036100B44878 /* LaunchScreen.storyboard */; };
 		717A4F1D209A036200B44878 /* FYP_MewanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F1C209A036200B44878 /* FYP_MewanTests.swift */; };
 		717A4F28209A036200B44878 /* FYP_MewanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F27209A036200B44878 /* FYP_MewanUITests.swift */; };
+		717A4F3A209A05D800B44878 /* Alphanum_28x28.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F35209A05D600B44878 /* Alphanum_28x28.mlmodel */; };
+		717A4F3B209A05D800B44878 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F36209A05D700B44878 /* ImageUtils.swift */; };
+		717A4F3C209A05D800B44878 /* TemplateLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F37209A05D700B44878 /* TemplateLabelNode.swift */; };
+		717A4F3D209A05D800B44878 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F38209A05D800B44878 /* StatusViewController.swift */; };
+		717A4F3E209A05D800B44878 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F39209A05D800B44878 /* Utilities.swift */; };
+		9142A37BCDB8B11D9D6403C1 /* Pods_FYP_Mewan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */; };
+		BD2CDFA4FAC99DBBCB009037 /* Pods_FYP_MewanUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3F745035F9A206DC80676E9 /* Pods_FYP_MewanUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F7160E6CC667E1B36EC94AC /* Pods-FYP-Mewan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-Mewan.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan.debug.xcconfig"; sourceTree = "<group>"; };
+		2CD12081CAE1BDB2A9178EEF /* Pods_FYP_MewanTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_MewanTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C6BB471BB218AC4A1D21209 /* Pods-FYP-MewanTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanTests/Pods-FYP-MewanTests.debug.xcconfig"; sourceTree = "<group>"; };
 		717A4F00209A035D00B44878 /* FYP-Mewan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FYP-Mewan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		717A4F03209A035D00B44878 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		717A4F05209A035D00B44878 /* Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Scene.sks; sourceTree = "<group>"; };
@@ -51,6 +62,17 @@
 		717A4F23209A036200B44878 /* FYP-MewanUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FYP-MewanUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		717A4F27209A036200B44878 /* FYP_MewanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FYP_MewanUITests.swift; sourceTree = "<group>"; };
 		717A4F29209A036200B44878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		717A4F35209A05D600B44878 /* Alphanum_28x28.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Alphanum_28x28.mlmodel; sourceTree = "<group>"; };
+		717A4F36209A05D700B44878 /* ImageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
+		717A4F37209A05D700B44878 /* TemplateLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateLabelNode.swift; sourceTree = "<group>"; };
+		717A4F38209A05D800B44878 /* StatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
+		717A4F39209A05D800B44878 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		763D888DB7AF7E4B00CF9333 /* Pods-FYP-MewanUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanUITests/Pods-FYP-MewanUITests.release.xcconfig"; sourceTree = "<group>"; };
+		8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_Mewan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-Mewan.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan.release.xcconfig"; sourceTree = "<group>"; };
+		B2928D9A37C77D2CEA23869D /* Pods-FYP-MewanTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanTests/Pods-FYP-MewanTests.release.xcconfig"; sourceTree = "<group>"; };
+		B55A7A6A8404840DE45709FC /* Pods-FYP-MewanUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanUITests/Pods-FYP-MewanUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C3F745035F9A206DC80676E9 /* Pods_FYP_MewanUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_MewanUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9142A37BCDB8B11D9D6403C1 /* Pods_FYP_Mewan.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				420FAB18B4BDC56752A58B68 /* Pods_FYP_MewanTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +96,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD2CDFA4FAC99DBBCB009037 /* Pods_FYP_MewanUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5DFC9CFF9A60C3E73C42693B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1F7160E6CC667E1B36EC94AC /* Pods-FYP-Mewan.debug.xcconfig */,
+				8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */,
+				6C6BB471BB218AC4A1D21209 /* Pods-FYP-MewanTests.debug.xcconfig */,
+				B2928D9A37C77D2CEA23869D /* Pods-FYP-MewanTests.release.xcconfig */,
+				B55A7A6A8404840DE45709FC /* Pods-FYP-MewanUITests.debug.xcconfig */,
+				763D888DB7AF7E4B00CF9333 /* Pods-FYP-MewanUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		717A4EF7209A035D00B44878 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +123,8 @@
 				717A4F1B209A036200B44878 /* FYP-MewanTests */,
 				717A4F26209A036200B44878 /* FYP-MewanUITests */,
 				717A4F01209A035D00B44878 /* Products */,
+				5DFC9CFF9A60C3E73C42693B /* Pods */,
+				AC4B9ABCD138B24E27C9B321 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +141,11 @@
 		717A4F02209A035D00B44878 /* FYP-Mewan */ = {
 			isa = PBXGroup;
 			children = (
+				717A4F35209A05D600B44878 /* Alphanum_28x28.mlmodel */,
+				717A4F36209A05D700B44878 /* ImageUtils.swift */,
+				717A4F38209A05D800B44878 /* StatusViewController.swift */,
+				717A4F37209A05D700B44878 /* TemplateLabelNode.swift */,
+				717A4F39209A05D800B44878 /* Utilities.swift */,
 				717A4F03209A035D00B44878 /* AppDelegate.swift */,
 				717A4F05209A035D00B44878 /* Scene.sks */,
 				717A4F07209A035D00B44878 /* Scene.swift */,
@@ -131,6 +176,16 @@
 			path = "FYP-MewanUITests";
 			sourceTree = "<group>";
 		};
+		AC4B9ABCD138B24E27C9B321 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */,
+				2CD12081CAE1BDB2A9178EEF /* Pods_FYP_MewanTests.framework */,
+				C3F745035F9A206DC80676E9 /* Pods_FYP_MewanUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,9 +193,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 717A4F2C209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-Mewan" */;
 			buildPhases = (
+				C07425BE5F9EB0C656E67073 /* [CP] Check Pods Manifest.lock */,
 				717A4EFC209A035D00B44878 /* Sources */,
 				717A4EFD209A035D00B44878 /* Frameworks */,
 				717A4EFE209A035D00B44878 /* Resources */,
+				8CB9D604DDFEDD60E6A21899 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -155,6 +212,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 717A4F2F209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-MewanTests" */;
 			buildPhases = (
+				2F04D7908D8B8A4D09F221D8 /* [CP] Check Pods Manifest.lock */,
 				717A4F14209A036200B44878 /* Sources */,
 				717A4F15209A036200B44878 /* Frameworks */,
 				717A4F16209A036200B44878 /* Resources */,
@@ -173,6 +231,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 717A4F32209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-MewanUITests" */;
 			buildPhases = (
+				50385B40E25C18263AB85148 /* [CP] Check Pods Manifest.lock */,
 				717A4F1F209A036200B44878 /* Sources */,
 				717A4F20209A036200B44878 /* Frameworks */,
 				717A4F21209A036200B44878 /* Resources */,
@@ -258,14 +317,94 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2F04D7908D8B8A4D09F221D8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FYP-MewanTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		50385B40E25C18263AB85148 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FYP-MewanUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8CB9D604DDFEDD60E6A21899 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GPUImage2/GPUImage2.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage2.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C07425BE5F9EB0C656E67073 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FYP-Mewan-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		717A4EFC209A035D00B44878 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				717A4F3D209A05D800B44878 /* StatusViewController.swift in Sources */,
 				717A4F0A209A035D00B44878 /* ViewController.swift in Sources */,
 				717A4F08209A035D00B44878 /* Scene.swift in Sources */,
+				717A4F3C209A05D800B44878 /* TemplateLabelNode.swift in Sources */,
 				717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */,
+				717A4F3B209A05D800B44878 /* ImageUtils.swift in Sources */,
+				717A4F3E209A05D800B44878 /* Utilities.swift in Sources */,
+				717A4F3A209A05D800B44878 /* Alphanum_28x28.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,11 +575,13 @@
 		};
 		717A4F2D209A036200B44878 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1F7160E6CC667E1B36EC94AC /* Pods-FYP-Mewan.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -454,11 +595,13 @@
 		};
 		717A4F2E209A036200B44878 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -472,6 +615,7 @@
 		};
 		717A4F30209A036200B44878 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C6BB471BB218AC4A1D21209 /* Pods-FYP-MewanTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -493,6 +637,7 @@
 		};
 		717A4F31209A036200B44878 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B2928D9A37C77D2CEA23869D /* Pods-FYP-MewanTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -514,6 +659,7 @@
 		};
 		717A4F33209A036200B44878 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B55A7A6A8404840DE45709FC /* Pods-FYP-MewanUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -534,6 +680,7 @@
 		};
 		717A4F34209A036200B44878 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 763D888DB7AF7E4B00CF9333 /* Pods-FYP-MewanUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
