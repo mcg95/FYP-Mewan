@@ -1,0 +1,597 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F03209A035D00B44878 /* AppDelegate.swift */; };
+		717A4F06209A035D00B44878 /* Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F05209A035D00B44878 /* Scene.sks */; };
+		717A4F08209A035D00B44878 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F07209A035D00B44878 /* Scene.swift */; };
+		717A4F0A209A035D00B44878 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F09209A035D00B44878 /* ViewController.swift */; };
+		717A4F0D209A035D00B44878 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F0B209A035D00B44878 /* Main.storyboard */; };
+		717A4F0F209A036100B44878 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F0E209A036100B44878 /* Assets.xcassets */; };
+		717A4F12209A036100B44878 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F10209A036100B44878 /* LaunchScreen.storyboard */; };
+		717A4F1D209A036200B44878 /* FYP_MewanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F1C209A036200B44878 /* FYP_MewanTests.swift */; };
+		717A4F28209A036200B44878 /* FYP_MewanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F27209A036200B44878 /* FYP_MewanUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		717A4F19209A036200B44878 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 717A4EF8209A035D00B44878 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 717A4EFF209A035D00B44878;
+			remoteInfo = "FYP-Mewan";
+		};
+		717A4F24209A036200B44878 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 717A4EF8209A035D00B44878 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 717A4EFF209A035D00B44878;
+			remoteInfo = "FYP-Mewan";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		717A4F00209A035D00B44878 /* FYP-Mewan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FYP-Mewan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		717A4F03209A035D00B44878 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		717A4F05209A035D00B44878 /* Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Scene.sks; sourceTree = "<group>"; };
+		717A4F07209A035D00B44878 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		717A4F09209A035D00B44878 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		717A4F0C209A035D00B44878 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		717A4F0E209A036100B44878 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		717A4F11209A036100B44878 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		717A4F13209A036100B44878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		717A4F18209A036200B44878 /* FYP-MewanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FYP-MewanTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		717A4F1C209A036200B44878 /* FYP_MewanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FYP_MewanTests.swift; sourceTree = "<group>"; };
+		717A4F1E209A036200B44878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		717A4F23209A036200B44878 /* FYP-MewanUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FYP-MewanUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		717A4F27209A036200B44878 /* FYP_MewanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FYP_MewanUITests.swift; sourceTree = "<group>"; };
+		717A4F29209A036200B44878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		717A4EFD209A035D00B44878 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		717A4F15209A036200B44878 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		717A4F20209A036200B44878 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		717A4EF7209A035D00B44878 = {
+			isa = PBXGroup;
+			children = (
+				717A4F02209A035D00B44878 /* FYP-Mewan */,
+				717A4F1B209A036200B44878 /* FYP-MewanTests */,
+				717A4F26209A036200B44878 /* FYP-MewanUITests */,
+				717A4F01209A035D00B44878 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		717A4F01209A035D00B44878 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				717A4F00209A035D00B44878 /* FYP-Mewan.app */,
+				717A4F18209A036200B44878 /* FYP-MewanTests.xctest */,
+				717A4F23209A036200B44878 /* FYP-MewanUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		717A4F02209A035D00B44878 /* FYP-Mewan */ = {
+			isa = PBXGroup;
+			children = (
+				717A4F03209A035D00B44878 /* AppDelegate.swift */,
+				717A4F05209A035D00B44878 /* Scene.sks */,
+				717A4F07209A035D00B44878 /* Scene.swift */,
+				717A4F09209A035D00B44878 /* ViewController.swift */,
+				717A4F0B209A035D00B44878 /* Main.storyboard */,
+				717A4F0E209A036100B44878 /* Assets.xcassets */,
+				717A4F10209A036100B44878 /* LaunchScreen.storyboard */,
+				717A4F13209A036100B44878 /* Info.plist */,
+			);
+			path = "FYP-Mewan";
+			sourceTree = "<group>";
+		};
+		717A4F1B209A036200B44878 /* FYP-MewanTests */ = {
+			isa = PBXGroup;
+			children = (
+				717A4F1C209A036200B44878 /* FYP_MewanTests.swift */,
+				717A4F1E209A036200B44878 /* Info.plist */,
+			);
+			path = "FYP-MewanTests";
+			sourceTree = "<group>";
+		};
+		717A4F26209A036200B44878 /* FYP-MewanUITests */ = {
+			isa = PBXGroup;
+			children = (
+				717A4F27209A036200B44878 /* FYP_MewanUITests.swift */,
+				717A4F29209A036200B44878 /* Info.plist */,
+			);
+			path = "FYP-MewanUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		717A4EFF209A035D00B44878 /* FYP-Mewan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 717A4F2C209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-Mewan" */;
+			buildPhases = (
+				717A4EFC209A035D00B44878 /* Sources */,
+				717A4EFD209A035D00B44878 /* Frameworks */,
+				717A4EFE209A035D00B44878 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FYP-Mewan";
+			productName = "FYP-Mewan";
+			productReference = 717A4F00209A035D00B44878 /* FYP-Mewan.app */;
+			productType = "com.apple.product-type.application";
+		};
+		717A4F17209A036200B44878 /* FYP-MewanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 717A4F2F209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-MewanTests" */;
+			buildPhases = (
+				717A4F14209A036200B44878 /* Sources */,
+				717A4F15209A036200B44878 /* Frameworks */,
+				717A4F16209A036200B44878 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				717A4F1A209A036200B44878 /* PBXTargetDependency */,
+			);
+			name = "FYP-MewanTests";
+			productName = "FYP-MewanTests";
+			productReference = 717A4F18209A036200B44878 /* FYP-MewanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		717A4F22209A036200B44878 /* FYP-MewanUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 717A4F32209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-MewanUITests" */;
+			buildPhases = (
+				717A4F1F209A036200B44878 /* Sources */,
+				717A4F20209A036200B44878 /* Frameworks */,
+				717A4F21209A036200B44878 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				717A4F25209A036200B44878 /* PBXTargetDependency */,
+			);
+			name = "FYP-MewanUITests";
+			productName = "FYP-MewanUITests";
+			productReference = 717A4F23209A036200B44878 /* FYP-MewanUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		717A4EF8209A035D00B44878 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Mewan Chathuranga";
+				TargetAttributes = {
+					717A4EFF209A035D00B44878 = {
+						CreatedOnToolsVersion = 9.3;
+					};
+					717A4F17209A036200B44878 = {
+						CreatedOnToolsVersion = 9.3;
+						TestTargetID = 717A4EFF209A035D00B44878;
+					};
+					717A4F22209A036200B44878 = {
+						CreatedOnToolsVersion = 9.3;
+						TestTargetID = 717A4EFF209A035D00B44878;
+					};
+				};
+			};
+			buildConfigurationList = 717A4EFB209A035D00B44878 /* Build configuration list for PBXProject "FYP-Mewan" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 717A4EF7209A035D00B44878;
+			productRefGroup = 717A4F01209A035D00B44878 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				717A4EFF209A035D00B44878 /* FYP-Mewan */,
+				717A4F17209A036200B44878 /* FYP-MewanTests */,
+				717A4F22209A036200B44878 /* FYP-MewanUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		717A4EFE209A035D00B44878 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				717A4F06209A035D00B44878 /* Scene.sks in Resources */,
+				717A4F12209A036100B44878 /* LaunchScreen.storyboard in Resources */,
+				717A4F0F209A036100B44878 /* Assets.xcassets in Resources */,
+				717A4F0D209A035D00B44878 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		717A4F16209A036200B44878 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		717A4F21209A036200B44878 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		717A4EFC209A035D00B44878 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				717A4F0A209A035D00B44878 /* ViewController.swift in Sources */,
+				717A4F08209A035D00B44878 /* Scene.swift in Sources */,
+				717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		717A4F14209A036200B44878 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				717A4F1D209A036200B44878 /* FYP_MewanTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		717A4F1F209A036200B44878 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				717A4F28209A036200B44878 /* FYP_MewanUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		717A4F1A209A036200B44878 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 717A4EFF209A035D00B44878 /* FYP-Mewan */;
+			targetProxy = 717A4F19209A036200B44878 /* PBXContainerItemProxy */;
+		};
+		717A4F25209A036200B44878 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 717A4EFF209A035D00B44878 /* FYP-Mewan */;
+			targetProxy = 717A4F24209A036200B44878 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		717A4F0B209A035D00B44878 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				717A4F0C209A035D00B44878 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		717A4F10209A036100B44878 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				717A4F11209A036100B44878 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		717A4F2A209A036200B44878 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		717A4F2B209A036200B44878 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		717A4F2D209A036200B44878 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2D3474FP86;
+				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-Mewan";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		717A4F2E209A036200B44878 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2D3474FP86;
+				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-Mewan";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		717A4F30209A036200B44878 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2D3474FP86;
+				INFOPLIST_FILE = "FYP-MewanTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FYP-Mewan.app/FYP-Mewan";
+			};
+			name = Debug;
+		};
+		717A4F31209A036200B44878 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2D3474FP86;
+				INFOPLIST_FILE = "FYP-MewanTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FYP-Mewan.app/FYP-Mewan";
+			};
+			name = Release;
+		};
+		717A4F33209A036200B44878 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2D3474FP86;
+				INFOPLIST_FILE = "FYP-MewanUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "FYP-Mewan";
+			};
+			name = Debug;
+		};
+		717A4F34209A036200B44878 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2D3474FP86;
+				INFOPLIST_FILE = "FYP-MewanUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "FYP-Mewan";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		717A4EFB209A035D00B44878 /* Build configuration list for PBXProject "FYP-Mewan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				717A4F2A209A036200B44878 /* Debug */,
+				717A4F2B209A036200B44878 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		717A4F2C209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-Mewan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				717A4F2D209A036200B44878 /* Debug */,
+				717A4F2E209A036200B44878 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		717A4F2F209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-MewanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				717A4F30209A036200B44878 /* Debug */,
+				717A4F31209A036200B44878 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		717A4F32209A036200B44878 /* Build configuration list for PBXNativeTarget "FYP-MewanUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				717A4F33209A036200B44878 /* Debug */,
+				717A4F34209A036200B44878 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 717A4EF8209A035D00B44878 /* Project object */;
+}
