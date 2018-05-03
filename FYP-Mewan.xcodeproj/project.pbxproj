@@ -22,6 +22,7 @@
 		717A4F3C209A05D800B44878 /* TemplateLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F37209A05D700B44878 /* TemplateLabelNode.swift */; };
 		717A4F3D209A05D800B44878 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F38209A05D800B44878 /* StatusViewController.swift */; };
 		717A4F3E209A05D800B44878 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F39209A05D800B44878 /* Utilities.swift */; };
+		717A4F40209B62E000B44878 /* Inceptionv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F3F209B62DF00B44878 /* Inceptionv3.mlmodel */; };
 		9142A37BCDB8B11D9D6403C1 /* Pods_FYP_Mewan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */; };
 		BD2CDFA4FAC99DBBCB009037 /* Pods_FYP_MewanUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3F745035F9A206DC80676E9 /* Pods_FYP_MewanUITests.framework */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		717A4F37209A05D700B44878 /* TemplateLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateLabelNode.swift; sourceTree = "<group>"; };
 		717A4F38209A05D800B44878 /* StatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
 		717A4F39209A05D800B44878 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		717A4F3F209B62DF00B44878 /* Inceptionv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Inceptionv3.mlmodel; sourceTree = "<group>"; };
 		763D888DB7AF7E4B00CF9333 /* Pods-FYP-MewanUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanUITests/Pods-FYP-MewanUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_Mewan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-Mewan.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan.release.xcconfig"; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 		717A4F02209A035D00B44878 /* FYP-Mewan */ = {
 			isa = PBXGroup;
 			children = (
+				717A4F3F209B62DF00B44878 /* Inceptionv3.mlmodel */,
 				717A4F35209A05D600B44878 /* Alphanum_28x28.mlmodel */,
 				717A4F36209A05D700B44878 /* ImageUtils.swift */,
 				717A4F38209A05D800B44878 /* StatusViewController.swift */,
@@ -361,10 +364,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DGRunkeeperSwitch/DGRunkeeperSwitch.framework",
 				"${BUILT_PRODUCTS_DIR}/GPUImage2/GPUImage2.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DGRunkeeperSwitch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage2.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				717A4F3D209A05D800B44878 /* StatusViewController.swift in Sources */,
+				717A4F40209B62E000B44878 /* Inceptionv3.mlmodel in Sources */,
 				717A4F0A209A035D00B44878 /* ViewController.swift in Sources */,
 				717A4F08209A035D00B44878 /* Scene.swift in Sources */,
 				717A4F3C209A05D800B44878 /* TemplateLabelNode.swift in Sources */,

@@ -11,13 +11,21 @@ import SpriteKit
 import ARKit
 import Vision
 import GPUImage2
-
+import DGRunkeeperSwitch
 
 class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var imagePreview: UIImageView!
     
     @IBOutlet weak var sceneView: ARSKView!
+    
+    @IBOutlet weak var runkeeperSwitch2: DGRunkeeperSwitch?
+
+    
+    @IBAction func switchValueDidChange(sender: DGRunkeeperSwitch!) {
+        selectedButtonIndex = sender.selectedIndex
+        print("valueChanged: \(sender.selectedIndex)")
+    }
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
@@ -28,6 +36,8 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     // Classification results
     private var identifierString = ""
     private var confidence: VNConfidence = 0.0
+    private var selectedButtonIndex = 0
+    var visionRequests = [VNRequest]()
     
     // Labels for classified objects by ARAnchor UUID
     private var anchorLabels = [UUID: String]()
@@ -41,6 +51,8 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     
     var shouldProcessFrames = true
     var ranFunctionTimer = false
+    
+    
     // The view controller that displays the status and "restart experience" UI.
     private lazy var statusViewController: StatusViewController = {
         return childViewControllers.lazy.flatMap({ $0 as? StatusViewController }).first!
@@ -85,8 +97,25 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         totConfidence = 0.0
         // Load the SKScene from 'Scene.sks'
         statusViewController.restartExperienceHandler = { [unowned self] in self.restartSession()}
+        
+        let runkeeperSwitch2 = DGRunkeeperSwitch()
+        runkeeperSwitch2.titles = ["Text", "Objects"]
+        runkeeperSwitch2.backgroundColor = UIColor(red: 239.0/255.0, green: 95.0/255.0, blue: 49.0/255.0, alpha: 1.0)
+        runkeeperSwitch2.selectedBackgroundColor = .white
+        runkeeperSwitch2.titleColor = .white
+        runkeeperSwitch2.selectedTitleColor = UIColor(red: 239.0/255.0, green: 95.0/255.0, blue: 49.0/255.0, alpha: 1.0)
+        runkeeperSwitch2.titleFont = UIFont(name: "HelveticaNeue-Medium", size: 13.0)
+        runkeeperSwitch2.frame = CGRect(x: 50.0, y: 20.0, width: view.bounds.width - 100.0, height: 30.0)
+        runkeeperSwitch2.autoresizingMask = [.flexibleWidth] // This is needed if you want the control to resize
+        view.addSubview(runkeeperSwitch2)
+
+        runkeeperSwitch2.addTarget(self, action: #selector(ViewController.switchValueDidChange(sender:)), for: .valueChanged )
+        
+        guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
+            fatalError("can't load Object model")
+        }
     }
-    
+   
     private func restartSession(){
         //   anchorLabels = [UUID: String]()
         //statusViewController.cancelAllScheduledMessages()
@@ -126,7 +155,12 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         if let anImage = videoImage {
             uiImage = UIImage(cgImage: anImage)
         }
-        self.detectText(image: uiImage!)
+        if selectedButtonIndex == 0 {
+            self.detectText(image: uiImage!)}
+        else if selectedButtonIndex == 1{
+            setupVision()
+            
+        }
     }
     
     private func detectText(image: UIImage){
@@ -323,7 +357,58 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     
     
     
+    //Object Detection Model
     
+    func setupVision() {
+        let model = try? VNCoreMLModel(for: Inceptionv3().model)
+        let classificationRequest = VNCoreMLRequest(model: model! , completionHandler: classificationCompleteHandler)
+        classificationRequest.imageCropAndScaleOption = VNImageCropAndScaleOption.centerCrop // Crop from centre of images and scale to appropriate size.
+        visionRequests = [classificationRequest]
+        let pixbuff : CVPixelBuffer? = (sceneView.session.currentFrame?.capturedImage)
+        if pixbuff == nil { return }
+        let ciImage = CIImage(cvPixelBuffer: pixbuff!)
+        
+        // Prepare CoreML/Vision Request
+        let imageRequestHandler = VNImageRequestHandler(ciImage: ciImage, options: [:])
+        
+        // Run Vision Image Request
+        do {
+            try imageRequestHandler.perform(self.visionRequests)
+        } catch {
+            print(error)
+        }
+
+    }
+        
+    
+    /// Handle results of the classification request
+    func classificationCompleteHandler(request: VNRequest, error: Error?) {
+        // Catch Errors
+        if error != nil {
+            print("Error: " + (error?.localizedDescription)!)
+            return
+        }
+        guard let observations = request.results else {
+            print("No results")
+            return
+        }
+        
+        // Get Classifications
+        let classifications = observations[0...2] // top 3 results
+            .flatMap({ $0 as? VNClassificationObservation })
+            .map({ "\($0.identifier) \(String(format:" : %.2f", $0.confidence))" })
+            .joined(separator: "\n")
+        
+        // Render Classifications
+        DispatchQueue.main.async {
+            // Print Classifications
+            print(classifications)
+            // print("-------------")
+            
+            self.statusViewController.showMessage(classifications)
+            
+        }
+    }
     
     
     // MARK: - ARSKViewDelegate
