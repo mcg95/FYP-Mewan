@@ -416,7 +416,7 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         }
       
         guard let results = request.results as? [VNClassificationObservation],
-            let topResult = results.first(where: {result in result.confidence > 0.7}) else {
+            let topResult = results.first(where: {result in result.confidence > 0.75}) else {
                 // fatalError("Unexpected result type from VNCoreMLRequest")
                 self.identifierString = ""
                 return            }
