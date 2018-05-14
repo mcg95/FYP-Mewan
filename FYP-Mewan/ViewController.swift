@@ -13,6 +13,7 @@ import Vision
 import GPUImage2
 import DGRunkeeperSwitch
 
+
 class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var imagePreview: UIImageView!
@@ -47,11 +48,13 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     let textChecker = UITextChecker()
     var correctStr: String = String()
     private var confidenceThreshold: Double = 0.75
+    private var objectConfidenceThreshold: Double = 0.4
     private var totConfidence: VNConfidence = 0.0
     
     var shouldProcessFrames = true
     var ranFunctionTimer = false
     
+    var englishWord = ""
     
     // The view controller that displays the status and "restart experience" UI.
     private lazy var statusViewController: StatusViewController = {
@@ -158,7 +161,27 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         if selectedButtonIndex == 0 {
             self.detectText(image: uiImage!)}
         else if selectedButtonIndex == 1{
-            setupVision()
+            if shouldProcessFrames == true{
+                
+                setupVision()
+
+                
+            } else if shouldProcessFrames == false{
+                if ranFunctionTimer == false {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 15.0, execute: {
+                        self.shouldProcessFrames = true
+                        print("Restarted Processing Frames")
+                        self.ranFunctionTimer = false
+                       
+                    })
+                    ranFunctionTimer = true
+                } else{
+                    
+                    print("Wait for frames to restart processing")
+                }
+                
+            }
+            
             
         }
     }
@@ -377,6 +400,8 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         } catch {
             print(error)
         }
+       
+        
 
     }
         
@@ -384,33 +409,133 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     /// Handle results of the classification request
     func classificationCompleteHandler(request: VNRequest, error: Error?) {
         // Catch Errors
+        print("running frames")
         if error != nil {
             print("Error: " + (error?.localizedDescription)!)
             return
         }
-        guard let observations = request.results else {
-            print("No results")
-            return
-        }
+      
+        guard let results = request.results as? [VNClassificationObservation],
+            let topResult = results.first(where: {result in result.confidence > 0.75}) else {
+                // fatalError("Unexpected result type from VNCoreMLRequest")
+                self.identifierString = ""
+                return            }
         
-        // Get Classifications
-        let classifications = observations[0...2] // top 3 results
-            .flatMap({ $0 as? VNClassificationObservation })
-            .map({ "\($0.identifier) \(String(format:" : %.2f", $0.confidence))" })
-            .joined(separator: "\n")
+        let classificationInfo: [String: Any] = ["wordNumber" : topResult.identifier,
+                                                 "characterNumber" : String(format:" : %.2f", topResult.confidence)]
+        // Get Classification
+       
+            let result = topResult.identifier
         
+      /*  self.totConfidence += topResult.confidence
+        let totConfidenceDouble = Double((self.totConfidence))
+        let resultsCount = Double(result.count)
+            let avgConfidence = totConfidenceDouble/resultsCount
+            let averageConfidence = Double(avgConfidence)
+        if (averageConfidence > (self.objectConfidenceThreshold)){
+                self.shouldProcessFrames = false
+                print("Stopped Processing Frames")*/
+            
+            DispatchQueue.main.async {
+
+                // Print Classifications
+                print(topResult.identifier)
+                self.englishWord = topResult.identifier
+                self.translateText(text2Translate: topResult.identifier)
+                // print("-------------")
+               
+
+                // self.statusViewController.showMessage()
+                
+            }
+          // }
+            
+            
         // Render Classifications
-        DispatchQueue.main.async {
-            // Print Classifications
-            print(classifications)
-            // print("-------------")
-            
-            self.statusViewController.showMessage(classifications)
-            
+        
+    }
+    
+    func translateText(text2Translate: String){
+        
+        struct encodeText: Codable {
+            var text = String()
         }
+        
+        let azureKey = "2fbde4da2fb247b1b92b0a15b6b7f01e"
+        
+        let contentType = "application/json"
+        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
+        let host = "dev.microsofttranslator.com"
+        let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=ms"
+        
+        
+
+        var encodeTextSingle = encodeText()
+        var toTranslate = [encodeText]()
+        encodeTextSingle.text = text2Translate
+
+        toTranslate.append(encodeTextSingle)
+        
+        let encoder = JSONEncoder()
+        let jsonToTranslate = try? encoder.encode(toTranslate)
+      
+        let url = URL(string: apiURL)
+        var request = URLRequest(url: url!)
+        
+        request.httpMethod = "POST"
+        request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
+        request.addValue(host, forHTTPHeaderField: "Host")
+        request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
+        request.httpBody = jsonToTranslate
+        
+        let config = URLSessionConfiguration.default
+        let session =  URLSession(configuration: config)
+        
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            
+            if responseError != nil {
+                print("this is the error ", responseError!)
+                
+                let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                
+                self.present(alert, animated: true)
+                
+            }
+            print("*****")
+            self.parseJson(jsonData: responseData!)
+        }
+        task.resume()
     }
     
     
+    
+func parseJson(jsonData: Data) {
+    
+    //*****TRANSLATION RETURNED DATA*****
+    struct ReturnedJson: Codable {
+        var translations: [TranslatedStrings]
+    }
+    struct TranslatedStrings: Codable {
+        var text: String
+        var to: String
+    }
+    
+    let jsonDecoder = JSONDecoder()
+    let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
+    let numberOfTranslations = langTranslations!.count - 1
+    print(langTranslations!.count)
+    
+    //Put response on main thread to update UI
+    DispatchQueue.main.async {
+        print(langTranslations![0].translations[numberOfTranslations].text)
+        self.statusViewController.showMessage("Malay:" + langTranslations![0].translations[numberOfTranslations].text + " English: " + self.englishWord)
+    }
+}
+ 
     // MARK: - ARSKViewDelegate
     
     func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
