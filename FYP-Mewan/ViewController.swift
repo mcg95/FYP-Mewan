@@ -12,7 +12,7 @@ import ARKit
 import Vision
 import GPUImage2
 import DGRunkeeperSwitch
-
+import CoreData
 
 class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
     
@@ -55,6 +55,9 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     var ranFunctionTimer = false
     
     var englishWord = ""
+    
+    //for Debug Purposes
+    var learntWords = [LearntWords]()
     
     // The view controller that displays the status and "restart experience" UI.
     private lazy var statusViewController: StatusViewController = {
@@ -116,6 +119,15 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         
         guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("can't load Object model")
+        }
+        let fetchRequest:NSFetchRequest<LearntWords> = LearntWords.fetchRequest()
+        
+        do{
+          let lWords = try CoreDataService.context.fetch(fetchRequest)
+            self.learntWords = lWords
+        }
+        catch{
+            print("CoreDataService Fetch Request Failed")
         }
     }
    
@@ -534,6 +546,21 @@ func parseJson(jsonData: Data) {
         print(langTranslations![0].translations[numberOfTranslations].text)
         self.statusViewController.showMessage("Malay:" + langTranslations![0].translations[numberOfTranslations].text + " English: " + self.englishWord)
     }
+    let wordModel = LearntWords(context: CoreDataService.context)
+    let englishWordsArr = self.englishWord.components(separatedBy: ", ")
+    let malayWordsArr = langTranslations![0].translations[numberOfTranslations].text.components(separatedBy: ",")
+    wordModel.englishword = englishWordsArr[0]
+    wordModel.malayword = malayWordsArr[0]
+    CoreDataService.saveContext()
+    learntWords.append(wordModel)
+    
+    
+    //-------------------------------Need to check CoreData for recognized object, if it exists, display options to choose correct answer, else add the word to CoreData and display translation.------------------------------
+    
+    
+    print("These are the Core Data words on top " + learntWords[0].englishword! + learntWords[0].malayword!)
+
+    
 }
  
     // MARK: - ARSKViewDelegate
