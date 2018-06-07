@@ -13,15 +13,34 @@ import Vision
 import GPUImage2
 import DGRunkeeperSwitch
 import CoreData
+import SwiftMessages
+import SRCountdownTimer
 
-class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var imagePreview: UIImageView!
     
-    @IBOutlet weak var sceneView: ARSKView!
+    @IBOutlet weak var sceneView: ARSCNView!
     
+    @IBOutlet weak var flashImage: UIImageView!
     @IBOutlet weak var runkeeperSwitch2: DGRunkeeperSwitch?
+    
+    @IBAction func flashToggle(_ sender: UIButton) {
+        if flashOn == false {
+            toggleTorch(on: true)
+            flashImage.image = #imageLiteral(resourceName: "flashOn")
+            flashOn = true
+        }else{
+            toggleTorch(on: false)
+            flashImage.image = #imageLiteral(resourceName: "flashOff")
 
+
+        }
+
+    }
+    @IBOutlet weak var flashToggleButton: UIButton!
+    
+    @IBOutlet weak var countdownLabel: SRCountdownTimer!
     
     @IBAction func switchValueDidChange(sender: DGRunkeeperSwitch!) {
         selectedButtonIndex = sender.selectedIndex
@@ -53,10 +72,17 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     
     var shouldProcessFrames = true
     var ranFunctionTimer = false
-    
     var englishWord = ""
+    var malayWord = ""
+    var displayedAnswers: Bool = false
+    let bubbleDepth : Float = 0.01 // the 'depth' of 3D text
+    var flashOn = false
     
-    //for Debug Purposes
+    //SwiftMessages Variables
+    var swiftMsgView: MessageView? = nil
+    
+    
+    //CoreData Model Array
     var learntWords = [LearntWords]()
     
     // The view controller that displays the status and "restart experience" UI.
@@ -95,12 +121,20 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         // Set the view's delegate
         
         // Show statistics such as fps and node count
-        let overlayScene = SKScene()
-        overlayScene.scaleMode = .aspectFill
+        let overlayScene = SCNScene()
+      //  overlayScene.scaleMode = .aspectFill
         sceneView.delegate = self
-        sceneView.presentScene(overlayScene)
+        sceneView.scene = overlayScene
+        //sceneView.presentScene(overlayScene)
         sceneView.session.delegate = self
+        sceneView.automaticallyUpdatesLighting = true
         totConfidence = 0.0
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(gestureRecognize:)))
+        view.addGestureRecognizer(tapGesture)
+            //answerOne.isHidden = true
+      //  answerTwo.isHidden = true
+       // answerThree.isHidden = true
+
         // Load the SKScene from 'Scene.sks'
         statusViewController.restartExperienceHandler = { [unowned self] in self.restartSession()}
         
@@ -114,23 +148,25 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         runkeeperSwitch2.frame = CGRect(x: 50.0, y: 20.0, width: view.bounds.width - 100.0, height: 30.0)
         runkeeperSwitch2.autoresizingMask = [.flexibleWidth] // This is needed if you want the control to resize
         view.addSubview(runkeeperSwitch2)
-
-        runkeeperSwitch2.addTarget(self, action: #selector(ViewController.switchValueDidChange(sender:)), for: .valueChanged )
         
+        runkeeperSwitch2.addTarget(self, action: #selector(ViewController.switchValueDidChange(sender:)), for: .valueChanged )
+        countdownLabel.isHidden = true
+        flashImage.image = #imageLiteral(resourceName: "flashOff")
+
         guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("can't load Object model")
         }
         let fetchRequest:NSFetchRequest<LearntWords> = LearntWords.fetchRequest()
         
         do{
-          let lWords = try CoreDataService.context.fetch(fetchRequest)
+            let lWords = try CoreDataService.context.fetch(fetchRequest)
             self.learntWords = lWords
         }
         catch{
             print("CoreDataService Fetch Request Failed")
         }
     }
-   
+    
     private func restartSession(){
         //   anchorLabels = [UUID: String]()
         //statusViewController.cancelAllScheduledMessages()
@@ -174,27 +210,71 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
             self.detectText(image: uiImage!)}
         else if selectedButtonIndex == 1{
             if shouldProcessFrames == true{
-                
+                 DispatchQueue.main.async {
+                    self.imagePreview.isHidden = true
+                    
+                }
                 setupVision()
-
+                
                 
             } else if shouldProcessFrames == false{
                 if ranFunctionTimer == false {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 15.0, execute: {
+                    DispatchQueue.main.async {
+                        self.countdownLabel.isHidden = false
+                        self.countdownLabel.timerFinishingText = "Restarted"
+                        self.countdownLabel.isOpaque = false
+                        self.countdownLabel.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+                        self.countdownLabel.labelTextColor = UIColor.red
+                        self.countdownLabel.lineWidth = 4
+                        self.countdownLabel.lineColor = UIColor.red
+                        self.countdownLabel.start(beginingValue: 5, interval: 1)
+                    }
+
+                   
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: {
                         self.shouldProcessFrames = true
                         print("Restarted Processing Frames")
                         self.ranFunctionTimer = false
-                       
+                        self.countdownLabel.isHidden = true
+
                     })
                     ranFunctionTimer = true
-                } else{
                     
+                } else{
+                   
                     print("Wait for frames to restart processing")
                 }
                 
             }
             
             
+        }
+    }
+    
+    func toggleTorch(on: Bool) {
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video)
+            else {return}
+        
+        if device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                
+                if on == true {
+                    device.torchMode = .on // set on
+                    flashOn = true
+                } else {
+                    device.torchMode = .off // set off
+                    flashOn = false
+
+                }
+                
+                device.unlockForConfiguration()
+            } catch {
+                print("Torch could not be used")
+            }
+        } else {
+            print("Torch is not available")
         }
     }
     
@@ -251,7 +331,8 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
             
         } else if shouldProcessFrames == false{
             if ranFunctionTimer == false {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10.0, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: {
+                    
                     self.shouldProcessFrames = true
                     print("Restarted Processing Frames")
                     self.ranFunctionTimer = false
@@ -412,11 +493,11 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         } catch {
             print(error)
         }
-       
         
-
+        
+        
     }
-        
+    
     
     /// Handle results of the classification request
     func classificationCompleteHandler(request: VNRequest, error: Error?) {
@@ -426,7 +507,7 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
             print("Error: " + (error?.localizedDescription)!)
             return
         }
-      
+        
         guard let results = request.results as? [VNClassificationObservation],
             let topResult = results.first(where: {result in result.confidence > 0.75}) else {
                 // fatalError("Unexpected result type from VNCoreMLRequest")
@@ -436,33 +517,33 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         let classificationInfo: [String: Any] = ["wordNumber" : topResult.identifier,
                                                  "characterNumber" : String(format:" : %.2f", topResult.confidence)]
         // Get Classification
-       
-            let result = topResult.identifier
         
-      /*  self.totConfidence += topResult.confidence
-        let totConfidenceDouble = Double((self.totConfidence))
-        let resultsCount = Double(result.count)
-            let avgConfidence = totConfidenceDouble/resultsCount
-            let averageConfidence = Double(avgConfidence)
-        if (averageConfidence > (self.objectConfidenceThreshold)){
-                self.shouldProcessFrames = false
-                print("Stopped Processing Frames")*/
+        let result = topResult.identifier
+        
+        /*  self.totConfidence += topResult.confidence
+         let totConfidenceDouble = Double((self.totConfidence))
+         let resultsCount = Double(result.count)
+         let avgConfidence = totConfidenceDouble/resultsCount
+         let averageConfidence = Double(avgConfidence)
+         if (averageConfidence > (self.objectConfidenceThreshold)){
+         self.shouldProcessFrames = false
+         print("Stopped Processing Frames")*/
+        
+        DispatchQueue.main.async {
             
-            DispatchQueue.main.async {
-
-                // Print Classifications
-                print(topResult.identifier)
-                self.englishWord = topResult.identifier
-                self.translateText(text2Translate: topResult.identifier)
-                // print("-------------")
-               
-
-                // self.statusViewController.showMessage()
-                
-            }
-          // }
+            // Print Classifications
+            print(topResult.identifier)
+            self.englishWord = topResult.identifier
+            self.translateText(text2Translate: topResult.identifier)
+            // print("-------------")
             
             
+            // self.statusViewController.showMessage()
+            
+        }
+        // }
+        
+        
         // Render Classifications
         
     }
@@ -473,7 +554,7 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
             var text = String()
         }
         
-        let azureKey = "2fbde4da2fb247b1b92b0a15b6b7f01e"
+        let azureKey = "4ab01c02ee364f82ade642537439c4d3"
         
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
@@ -481,16 +562,16 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
         let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=ms"
         
         
-
+        
         var encodeTextSingle = encodeText()
         var toTranslate = [encodeText]()
         encodeTextSingle.text = text2Translate
-
+        
         toTranslate.append(encodeTextSingle)
         
         let encoder = JSONEncoder()
         let jsonToTranslate = try? encoder.encode(toTranslate)
-      
+        
         let url = URL(string: apiURL)
         var request = URLRequest(url: url!)
         
@@ -525,44 +606,206 @@ class ViewController: UIViewController, ARSKViewDelegate, ARSessionDelegate, UIG
     
     
     
-func parseJson(jsonData: Data) {
+    func parseJson(jsonData: Data) {
+        
+        //*****TRANSLATION RETURNED DATA*****
+        struct ReturnedJson: Codable {
+            var translations: [TranslatedStrings]
+        }
+        struct TranslatedStrings: Codable {
+            var text: String
+            var to: String
+        }
+        
+        let jsonDecoder = JSONDecoder()
+        let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
+        let numberOfTranslations = langTranslations!.count - 1
+        print(langTranslations!.count)
+        
+        //Put response on main thread to update UI
+        
+        malayWord = langTranslations![0].translations[numberOfTranslations].text
+        
+        let wordModel = LearntWords(context: CoreDataService.context)
+        let englishWordsArr = self.englishWord.components(separatedBy: ", ")
+        let malayWordsArr = malayWord.components(separatedBy: ",")
+        wordModel.englishword = englishWordsArr[0]
+        wordModel.malayword = malayWordsArr[0]
+        let detectedWord = learntWords.filter{ $0.englishword == wordModel.englishword }
+        
+        let wordExists = detectedWord.isEmpty
+        if wordExists == false{
+            
+            self.shouldProcessFrames = false
+            
+            if displayedAnswers == false{
+                
+                displayedAnswers = true
+                displayAnswers()
+            }
+         /*   print("Show user 3 answers to choose the correct one from....FALSE")
+            //Config view
+            self.swiftMsgView = MessageView.viewFromNib(layout: .cardView)
+            self.swiftMsgView?.configureContent(title: "False!", body: "Show user 3 answers to choose the correct one from.")
+            let iconText = "✅"
+            self.swiftMsgView?.configureTheme(backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8), foregroundColor: UIColor.white, iconImage: nil, iconText: iconText)
+            // self.swiftMsgView?.button?.setImage(Icon.errorSubtle.image, for: .normal)
+            self.swiftMsgView?.button?.setTitle("Hide", for: .normal)
+            self.swiftMsgView?.button?.backgroundColor = UIColor.clear
+            self.swiftMsgView?.button?.tintColor = UIColor.white
+            self.swiftMsgView?.configureDropShadow()
+            
+            //Config
+            var swiftConfig = SwiftMessages.defaultConfig
+            swiftConfig.interactiveHide = true
+            swiftConfig.presentationStyle = .top
+            swiftConfig.duration = .automatic
+            
+            //Show
+            SwiftMessages.show(config: swiftConfig, view: self.swiftMsgView!)
+            */
+        }else if wordExists == true{
+            self.shouldProcessFrames = false
+            
+            
+            //Config view
+            self.swiftMsgView = MessageView.viewFromNib(layout: .cardView)
+            self.swiftMsgView?.configureContent(title: "True!", body: "This is a new word, so proceed with saving it into CoreData.")
+            let iconText = "✅"
+            self.swiftMsgView?.configureTheme(backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8), foregroundColor: UIColor.white, iconImage: nil, iconText: iconText)
+            // self.swiftMsgView?.button?.setImage(Icon.errorSubtle.image, for: .normal)
+            self.swiftMsgView?.button?.setTitle("Hide", for: .normal)
+            self.swiftMsgView?.button?.backgroundColor = UIColor.clear
+            self.swiftMsgView?.button?.tintColor = UIColor.white
+            self.swiftMsgView?.configureDropShadow()
+            
+            //Config
+            var swiftConfig = SwiftMessages.defaultConfig
+            swiftConfig.interactiveHide = true
+            swiftConfig.presentationStyle = .top
+            swiftConfig.duration = .automatic
+            
+            //Show
+            SwiftMessages.show(config: swiftConfig, view: self.swiftMsgView!)
+            print("This is a new word, so proceed with saving it into CoreData....TRUE")
+         //   print("These are the Core Data words on top " + self.learntWords[0].englishword! + self.learntWords[0].malayword!)
+            
+            
+            self.learntWords.append(wordModel)
+            
+            self.saveToCoreData()
+        
+        }
     
-    //*****TRANSLATION RETURNED DATA*****
-    struct ReturnedJson: Codable {
-        var translations: [TranslatedStrings]
+        //-------------------------------Need to check CoreData for recognized object, if it exists, display options to choose correct answer, else add the word to CoreData and display translation.------------------------------
+      
+        
+        //----------------------------------------------------------------------------------------//
     }
-    struct TranslatedStrings: Codable {
-        var text: String
-        var to: String
-    }
     
-    let jsonDecoder = JSONDecoder()
-    let langTranslations = try? jsonDecoder.decode(Array<ReturnedJson>.self, from: jsonData)
-    let numberOfTranslations = langTranslations!.count - 1
-    print(langTranslations!.count)
-    
-    //Put response on main thread to update UI
-    DispatchQueue.main.async {
-        print(langTranslations![0].translations[numberOfTranslations].text)
-        self.statusViewController.showMessage("Malay:" + langTranslations![0].translations[numberOfTranslations].text + " English: " + self.englishWord)
-    }
-    let wordModel = LearntWords(context: CoreDataService.context)
-    let englishWordsArr = self.englishWord.components(separatedBy: ", ")
-    let malayWordsArr = langTranslations![0].translations[numberOfTranslations].text.components(separatedBy: ",")
-    wordModel.englishword = englishWordsArr[0]
-    wordModel.malayword = malayWordsArr[0]
-    CoreDataService.saveContext()
-    learntWords.append(wordModel)
-    
-    
-    //-------------------------------Need to check CoreData for recognized object, if it exists, display options to choose correct answer, else add the word to CoreData and display translation.------------------------------
-    
-    
-    print("These are the Core Data words on top " + learntWords[0].englishword! + learntWords[0].malayword!)
-
-    
-}
  
+    func saveToCoreData(){
+       
+        CoreDataService.saveContext()
+        DispatchQueue.main.async {
+            self.statusViewController.showMessage("Malay:" + self.malayWord + " English: " + self.englishWord)
+        }
+    }
+    @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
+        // HIT TEST : REAL WORLD
+        // Get Screen Centre
+        let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
+        
+        let arHitTestResults : [ARHitTestResult] = sceneView.hitTest(screenCentre, types: [.featurePoint]) // Alternatively, we could use '.existingPlaneUsingExtent' for more grounded hit-test-points.
+        
+        if let closestResult = arHitTestResults.first {
+            // Get Coordinates of HitTest
+            let transform : matrix_float4x4 = closestResult.worldTransform
+            let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+            
+            // Create 3D Text
+            let node : SCNNode = createNewBubbleParentNode(englishWord)
+            sceneView.scene.rootNode.addChildNode(node)
+            node.position = worldCoord
+        }
+    }
+    
+    func createNewBubbleParentNode(_ text : String) -> SCNNode {
+        // Warning: Creating 3D Text is susceptible to crashing. To reduce chances of crashing; reduce number of polygons, letters, smoothness, etc.
+        
+        // TEXT BILLBOARD CONSTRAINT
+        let billboardConstraint = SCNBillboardConstraint()
+        billboardConstraint.freeAxes = SCNBillboardAxis.Y
+        
+        // BUBBLE-TEXT
+        let bubble = SCNText(string: text, extrusionDepth: CGFloat(bubbleDepth))
+        var font = UIFont(name: "Futura", size: 0.15)
+        font = font?.withTraits(traits: .traitBold)
+        bubble.font = font
+        bubble.alignmentMode = kCAAlignmentCenter
+        bubble.firstMaterial?.diffuse.contents = UIColor.orange
+        bubble.firstMaterial?.specular.contents = UIColor.white
+        bubble.firstMaterial?.isDoubleSided = true
+        // bubble.flatness // setting this too low can cause crashes.
+        bubble.chamferRadius = CGFloat(bubbleDepth)
+        
+        // BUBBLE NODE
+        let (minBound, maxBound) = bubble.boundingBox
+        let bubbleNode = SCNNode(geometry: bubble)
+        // Centre Node - to Centre-Bottom point
+        bubbleNode.pivot = SCNMatrix4MakeTranslation( (maxBound.x - minBound.x)/2, minBound.y, bubbleDepth/2)
+        // Reduce default text size
+        bubbleNode.scale = SCNVector3Make(0.2, 0.2, 0.2)
+        
+        // CENTRE POINT NODE
+        let sphere = SCNSphere(radius: 0.005)
+        sphere.firstMaterial?.diffuse.contents = UIColor.cyan
+        let sphereNode = SCNNode(geometry: sphere)
+        
+        // BUBBLE PARENT NODE
+        let bubbleNodeParent = SCNNode()
+        bubbleNodeParent.addChildNode(bubbleNode)
+        bubbleNodeParent.addChildNode(sphereNode)
+        bubbleNodeParent.constraints = [billboardConstraint]
+        
+        return bubbleNodeParent
+    }
+    
+    @IBOutlet weak var answerOne: UIButton!
+    @IBOutlet weak var answerTwo: UIButton!
+    @IBOutlet weak var answerThree: UIButton!
+    
+    @IBOutlet var answerButtons: [UIButton]!
+    
+    func displayAnswers(){
+        var randomWords1 = ["1","2","3","4","5"]
+        var randomWords2 = ["6","7","8","9","10"]
+        let shuffledRandomWords1 = randomWords1.shuffle()
+        let shuffledRandomWords2 = randomWords2.shuffle()
+        let malayWordArray = malayWord.components(separatedBy: ", ")
+        let trimmedMalayWord = malayWordArray[0]
+        let correctAnswer = "\(trimmedMalayWord)"
+        var answerList:[String] = ["\(correctAnswer)","\(shuffledRandomWords1.chooseOne)","\(shuffledRandomWords2.chooseOne)"]
+        var shuffledAnswerList = answerList.shuffle()
+            DispatchQueue.main.async {
+               
+
+                
+               // i.setTitle(answerList.sm_random(), for: .normal)
+                self.displayedAnswers = false
+                self.answerOne.setTitle(answerList[0], for: .normal)
+                self.answerTwo.setTitle(answerList[1], for: .normal)
+                self.answerThree.setTitle(answerList[2], for: .normal)
+                self.answerOne.isHidden = false
+                self.answerTwo.isHidden = false
+                self.answerThree.isHidden = false
+                
+        }
+      
+        
+       
+        
+    }
     // MARK: - ARSKViewDelegate
     
     func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
@@ -592,7 +835,7 @@ func parseJson(jsonData: Data) {
     
     func sessionWasInterrupted(_ session: ARSession) {
         // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        setOverlaysHidden(true)
+      //  setOverlaysHidden(true)
         
     }
     
@@ -617,7 +860,7 @@ func parseJson(jsonData: Data) {
     
     
     // Show the classification results in the UI.
-    
+   /*
     
     @IBAction func placeLabelAtLocation(sender: UITapGestureRecognizer){
         let hitLocationInView = sender.location(in: sceneView)
@@ -632,7 +875,7 @@ func parseJson(jsonData: Data) {
             anchorLabels[anchor.identifier] = identifierString
         }
     }
-    
+    */
     func view(_ view: ARSKView, didAdd node: SKNode, for anchor: ARAnchor) {
         guard let labelText = anchorLabels[anchor.identifier] else {
             fatalError("Missing Expected Associated Label For Anchor")
@@ -641,17 +884,7 @@ func parseJson(jsonData: Data) {
         node.addChild(label)
     }
     
-    private func setOverlaysHidden(_ shouldHide: Bool) {
-        sceneView.scene!.children.forEach { node in
-            if shouldHide {
-                // Hide overlay content immediately during relocalization.
-                node.alpha = 0
-            } else {
-                // Fade overlay content in after relocalization succeeds.
-                node.run(.fadeIn(withDuration: 0.5))
-            }
-        }
-    }
+   
     
     private func displayErrorMessage(title: String, message: String) {
         // Present an alert informing about the error that has occurred.
@@ -665,6 +898,13 @@ func parseJson(jsonData: Data) {
     }
 }
 
+extension UIFont {
+    // Based on: https://stackoverflow.com/questions/4713236/how-do-i-set-bold-and-italic-on-uilabel-of-iphone-ipad
+    func withTraits(traits:UIFontDescriptorSymbolicTraits...) -> UIFont {
+        let descriptor = self.fontDescriptor.withSymbolicTraits(UIFontDescriptorSymbolicTraits(traits))
+        return UIFont(descriptor: descriptor!, size: 0)
+    }
+}
 
 extension UIImage {
     func rotate(radians: Float) -> UIImage? {
@@ -688,4 +928,22 @@ extension UIImage {
         
         return newImage
     }
+}
+extension Array {
+    /// Returns an array containing this sequence shuffled
+    var shuffled: Array {
+        var elements = self
+        return elements.shuffle()
+    }
+    /// Shuffles this sequence in place
+    @discardableResult
+    mutating func shuffle() -> Array {
+        let count = self.count
+        indices.lazy.dropLast().forEach {
+            swapAt($0, Int(arc4random_uniform(UInt32(count - $0))) + $0)
+        }
+        return self
+    }
+    var chooseOne: Element { return self[Int(arc4random_uniform(UInt32(count)))] }
+    func choose(_ n: Int) -> Array { return Array(shuffled.prefix(n)) }
 }

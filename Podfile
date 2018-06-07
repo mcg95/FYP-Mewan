@@ -9,6 +9,9 @@ target 'FYP-Mewan' do
 
 pod 'GPUImage2', :podspec => './GPUImage2.podspec'
 pod 'DGRunkeeperSwitch', :git => 'https://github.com/alexanderkhitev/DGRunkeeperSwitch'
+pod 'SwiftMessages'
+pod 'SRCountdownTimer'
+
 
   target 'FYP-MewanTests' do
     inherit! :search_paths

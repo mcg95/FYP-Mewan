@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,14 +14,14 @@
         <!--View Controller-->
         <scene sceneID="pXP-J8-aXr">
             <objects>
-                <viewController id="dSq-Iw-jw5" customClass="ViewController" customModule="FYPTest1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dSq-Iw-jw5" customClass="ViewController" customModule="FYP_Mewan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8Xm-cU-sw8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <arskView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GqH-l5-Pei" userLabel="Scene View">
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wH7-cU-1j1">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </arskView>
+                            </arscnView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UIh-rG-L2x">
                                 <rect key="frame" x="0.0" y="26" width="375" height="85"/>
                                 <constraints>
@@ -36,26 +37,69 @@
                                     <constraint firstAttribute="height" constant="179" id="d3K-k3-DqS"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pJ7-0T-Czs">
+                                <rect key="frame" x="135" y="113" width="119" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nhw-Ht-DV2">
+                                <rect key="frame" x="262" y="113" width="97" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dlN-4B-OuC">
+                                <rect key="frame" x="16" y="113" width="101" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LWj-g0-rr5" customClass="SRCountdownTimer" customModule="SRCountdownTimer">
+                                <rect key="frame" x="138" y="287" width="99" height="92"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Ch-KO-tG8">
+                                <rect key="frame" x="16" y="607" width="47" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="flashToggle:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="X5Q-ky-tcW"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="slm-dU-3Mw">
+                                <rect key="frame" x="13" y="607" width="53" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="UIh-rG-L2x" firstAttribute="leading" secondItem="GqH-l5-Pei" secondAttribute="leading" id="3ev-nw-cLs"/>
-                            <constraint firstItem="GqH-l5-Pei" firstAttribute="top" secondItem="8Xm-cU-sw8" secondAttribute="top" id="5Vg-X3-o1O"/>
-                            <constraint firstItem="UIh-rG-L2x" firstAttribute="trailing" secondItem="GqH-l5-Pei" secondAttribute="trailing" id="8wV-T1-foI"/>
+                            <constraint firstItem="pJ7-0T-Czs" firstAttribute="baseline" secondItem="dlN-4B-OuC" secondAttribute="baseline" id="5ES-Yb-e55"/>
+                            <constraint firstItem="wH7-cU-1j1" firstAttribute="bottom" secondItem="FsH-1M-Tbd" secondAttribute="bottom" id="8eo-B8-oJy"/>
+                            <constraint firstItem="pJ7-0T-Czs" firstAttribute="centerX" secondItem="UIh-rG-L2x" secondAttribute="centerX" constant="7" id="B1g-fa-l4Q"/>
+                            <constraint firstItem="LWj-g0-rr5" firstAttribute="centerX" secondItem="UIh-rG-L2x" secondAttribute="centerX" id="Jde-KO-XCq"/>
                             <constraint firstItem="UIh-rG-L2x" firstAttribute="top" secondItem="v0x-J1-7ki" secondAttribute="top" constant="6" id="Muh-nh-yEU"/>
                             <constraint firstItem="UIh-rG-L2x" firstAttribute="leading" secondItem="8Xm-cU-sw8" secondAttribute="leading" id="NTK-wQ-Pdi"/>
+                            <constraint firstItem="LWj-g0-rr5" firstAttribute="leading" secondItem="v0x-J1-7ki" secondAttribute="leading" constant="138" id="SZA-wk-pOa"/>
+                            <constraint firstItem="pJ7-0T-Czs" firstAttribute="centerX" secondItem="wH7-cU-1j1" secondAttribute="centerX" constant="7" id="Vr8-UA-Y3U"/>
+                            <constraint firstItem="wH7-cU-1j1" firstAttribute="top" secondItem="UIh-rG-L2x" secondAttribute="top" constant="-26" id="b6n-TW-o5u"/>
                             <constraint firstItem="v0x-J1-7ki" firstAttribute="bottom" secondItem="UIh-rG-L2x" secondAttribute="bottom" constant="556" id="f5C-dT-lHi"/>
                             <constraint firstItem="FsH-1M-Tbd" firstAttribute="leading" secondItem="v0x-J1-7ki" secondAttribute="leading" constant="135" id="g2Y-fU-cZ5"/>
-                            <constraint firstItem="GqH-l5-Pei" firstAttribute="bottom" secondItem="v0x-J1-7ki" secondAttribute="bottom" id="iYZ-fJ-lp4"/>
+                            <constraint firstItem="dlN-4B-OuC" firstAttribute="leading" secondItem="8Xm-cU-sw8" secondAttribute="leadingMargin" id="ijh-AN-PEe"/>
                             <constraint firstAttribute="trailing" secondItem="UIh-rG-L2x" secondAttribute="trailing" id="lpI-9R-Dwj"/>
+                            <constraint firstItem="dlN-4B-OuC" firstAttribute="top" secondItem="UIh-rG-L2x" secondAttribute="bottom" constant="2" id="rdR-GN-o1i"/>
+                            <constraint firstItem="dlN-4B-OuC" firstAttribute="baseline" secondItem="nhw-Ht-DV2" secondAttribute="baseline" id="s9g-1u-kPv"/>
+                            <constraint firstItem="LWj-g0-rr5" firstAttribute="top" secondItem="8Xm-cU-sw8" secondAttribute="top" constant="287" id="sd7-1O-qOQ"/>
                             <constraint firstItem="FsH-1M-Tbd" firstAttribute="bottom" secondItem="v0x-J1-7ki" secondAttribute="bottom" id="uhx-SB-YYW"/>
+                            <constraint firstItem="wH7-cU-1j1" firstAttribute="leading" secondItem="UIh-rG-L2x" secondAttribute="leading" id="ujD-Eb-9yT"/>
+                            <constraint firstItem="LWj-g0-rr5" firstAttribute="centerY" secondItem="wH7-cU-1j1" secondAttribute="centerY" id="wHR-Oq-URJ"/>
                             <constraint firstItem="FsH-1M-Tbd" firstAttribute="trailing" secondItem="UIh-rG-L2x" secondAttribute="trailing" id="xpS-4v-GF5"/>
+                            <constraint firstItem="nhw-Ht-DV2" firstAttribute="trailing" secondItem="8Xm-cU-sw8" secondAttribute="trailingMargin" id="ya7-V1-Gj6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="v0x-J1-7ki"/>
                     </view>
                     <connections>
+                        <outlet property="answerOne" destination="dlN-4B-OuC" id="vIj-XS-64f"/>
+                        <outlet property="answerThree" destination="nhw-Ht-DV2" id="3wZ-qf-lbv"/>
+                        <outlet property="answerTwo" destination="pJ7-0T-Czs" id="X7u-xI-bGV"/>
+                        <outlet property="countdownLabel" destination="LWj-g0-rr5" id="9y5-ZL-2Yt"/>
+                        <outlet property="flashImage" destination="slm-dU-3Mw" id="tVY-HS-mxh"/>
+                        <outlet property="flashToggleButton" destination="8Ch-KO-tG8" id="F3g-z1-I3X"/>
                         <outlet property="imagePreview" destination="FsH-1M-Tbd" id="JLN-WC-a6v"/>
-                        <outlet property="sceneView" destination="GqH-l5-Pei" id="abC-ag-IBI"/>
+                        <outlet property="sceneView" destination="wH7-cU-1j1" id="JvJ-Jp-Paa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RW1-vf-95r" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -65,7 +109,7 @@
         <!--Status View Controller-->
         <scene sceneID="chO-md-XhG">
             <objects>
-                <viewController id="mNC-K2-dBu" customClass="StatusViewController" customModule="FYPTest1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="mNC-K2-dBu" customClass="StatusViewController" customModule="FYP_Mewan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cQ5-Cl-Wli">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="85"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
