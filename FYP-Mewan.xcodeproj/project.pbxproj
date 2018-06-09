@@ -27,6 +27,7 @@
 		717A4F4820AA24EF00B44878 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F4720AA24EF00B44878 /* CoreDataService.swift */; };
 		717A4F5F20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F5D20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift */; };
 		717A4F6020AA2B5B00B44878 /* LearntWords+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F5E20AA2B5B00B44878 /* LearntWords+CoreDataClass.swift */; };
+		717A4F6320CABD8F00B44878 /* ARShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F6220CABD8F00B44878 /* ARShared.swift */; };
 		9142A37BCDB8B11D9D6403C1 /* Pods_FYP_Mewan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */; };
 		BD2CDFA4FAC99DBBCB009037 /* Pods_FYP_MewanUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3F745035F9A206DC80676E9 /* Pods_FYP_MewanUITests.framework */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 		717A4F4720AA24EF00B44878 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		717A4F5D20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LearntWords+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		717A4F5E20AA2B5B00B44878 /* LearntWords+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LearntWords+CoreDataClass.swift"; sourceTree = "<group>"; };
+		717A4F6220CABD8F00B44878 /* ARShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARShared.swift; sourceTree = "<group>"; };
 		763D888DB7AF7E4B00CF9333 /* Pods-FYP-MewanUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanUITests/Pods-FYP-MewanUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_Mewan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-Mewan.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan.release.xcconfig"; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				717A4F10209A036100B44878 /* LaunchScreen.storyboard */,
 				717A4F13209A036100B44878 /* Info.plist */,
 				717A4F4720AA24EF00B44878 /* CoreDataService.swift */,
+				717A4F6220CABD8F00B44878 /* ARShared.swift */,
 			);
 			path = "FYP-Mewan";
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				717A4F3C209A05D800B44878 /* TemplateLabelNode.swift in Sources */,
 				717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */,
 				717A4F3B209A05D800B44878 /* ImageUtils.swift in Sources */,
+				717A4F6320CABD8F00B44878 /* ARShared.swift in Sources */,
 				717A4F4820AA24EF00B44878 /* CoreDataService.swift in Sources */,
 				717A4F3E209A05D800B44878 /* Utilities.swift in Sources */,
 				717A4F6020AA2B5B00B44878 /* LearntWords+CoreDataClass.swift in Sources */,
@@ -608,7 +612,10 @@
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-Mewan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -625,7 +632,10 @@
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-Mewan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -642,7 +652,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -660,7 +674,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -677,7 +695,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -694,7 +716,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

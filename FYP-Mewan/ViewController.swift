@@ -49,7 +49,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
-    
+    private var currentFrame: ARFrame?
     // Queue for dispatching vision classification requests
     private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
     
@@ -153,6 +153,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         countdownLabel.isHidden = true
         flashImage.image = #imageLiteral(resourceName: "flashOff")
 
+        
         guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("can't load Object model")
         }
@@ -183,20 +184,25 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else{
             return
         }
+        
+        currentFrame = frame
         visionQueue.async {
             do{
+               
                 // Release the pixel buffer when done, allowing the next buffer to be processed.
                 defer { self.currentBuffer = nil }
                 self.currentBuffer = frame.capturedImage
                 self.convertPixelBuffer(cvPixelBuffer: self.currentBuffer!)
                 //try requestHandler.perform([self.classificationRequest])
-                
+               
             } catch {
                 print("Error: Vision request failed with error \"\(error)\"")
             }
         }
         
     }
+    
+    
     
     private func convertPixelBuffer(cvPixelBuffer: CVPixelBuffer){
         var ciImage = CIImage(cvPixelBuffer: currentBuffer!)
@@ -533,10 +539,38 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             
             // Print Classifications
             print(topResult.identifier)
+            
+            // Create a transform with a translation of 0.2 meters in front of the camera
+            var translation = matrix_identity_float4x4
+            translation.columns.3.z = -0.4
+            let transform = simd_mul(self.currentFrame!.camera.transform , translation)
+            
+            
+            // Add a new anchor to the session
+            let anchor = ARAnchor(transform: transform)
+            ARShared.shared.anchorsToIdentifiers[anchor] = topResult.identifier
+            
+            // Set the identifier
+            self.sceneView.session.add(anchor: anchor)
+           
+            
+
+                // Get Coordinates of HitTest
+                let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+                
+                // Create 3D Text
+            let node : SCNNode = self.createNewBubbleParentNode(topResult.identifier)
+            self.sceneView.scene.rootNode.addChildNode(node)
+                node.position = worldCoord
+                
+                
+
             self.englishWord = topResult.identifier
             self.translateText(text2Translate: topResult.identifier)
             // print("-------------")
-            
+          
+
+
             
             // self.statusViewController.showMessage()
             
@@ -808,12 +842,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     // MARK: - ARSKViewDelegate
     
-    func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
+    func view(_ view: ARSCNView, nodeFor anchor: ARAnchor) -> SKNode? {
         // Create and configure a node for the anchor added to the view's session.
-        let labelNode = SKLabelNode(text: "👾")
+        
+        guard let identifier = ARShared.shared.anchorsToIdentifiers[anchor] else {
+            return nil
+        }
+   
+        let labelNode = SKLabelNode(text: identifier)
         labelNode.horizontalAlignmentMode = .center
         labelNode.verticalAlignmentMode = .center
-        return labelNode;
+        labelNode.fontName = UIFont.boldSystemFont(ofSize: 16).fontName
+        return labelNode
+        
+        
+        
+        
+        
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
