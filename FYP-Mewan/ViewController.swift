@@ -77,6 +77,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     var displayedAnswers: Bool = false
     let bubbleDepth : Float = 0.01 // the 'depth' of 3D text
     var flashOn = false
+    var nodePositions = ["x": SCNVector3.init().x, "y": SCNVector3.init().y, "z": SCNVector3.init().z]
     
     //SwiftMessages Variables
     var swiftMsgView: MessageView? = nil
@@ -515,7 +516,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
         
         guard let results = request.results as? [VNClassificationObservation],
-            let topResult = results.first(where: {result in result.confidence > 0.75}) else {
+            let topResult = results.first(where: {result in result.confidence > 0.5}) else {
                 // fatalError("Unexpected result type from VNCoreMLRequest")
                 self.identifierString = ""
                 return            }
@@ -542,7 +543,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             
             // Create a transform with a translation of 0.2 meters in front of the camera
             var translation = matrix_identity_float4x4
-            translation.columns.3.z = -0.4
+            translation.columns.3.z = -0.2
             let transform = simd_mul(self.currentFrame!.camera.transform , translation)
             
             
@@ -555,8 +556,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
            
             
 
-                // Get Coordinates of HitTest
-                let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+                let worldCoord : SCNVector3 =  SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
                 
                 // Create 3D Text
             let node : SCNNode = self.createNewBubbleParentNode(topResult.identifier)
@@ -758,9 +758,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
             
             // Create 3D Text
-            let node : SCNNode = createNewBubbleParentNode(englishWord)
-            sceneView.scene.rootNode.addChildNode(node)
-            node.position = worldCoord
+           // let node : SCNNode = createNewBubbleParentNode(englishWord)
+           // sceneView.scene.rootNode.addChildNode(node)
+           // node.position = worldCoord
         }
     }
     
