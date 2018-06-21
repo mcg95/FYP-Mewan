@@ -42,6 +42,70 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     @IBOutlet weak var countdownLabel: SRCountdownTimer!
     
+    @IBAction func testButton(_ sender: Any) {
+        for nodePos in nodePositions{
+            // Create 3D Text
+            
+            var randomWords1 = ["1","2","3","4","5"]
+            var randomWords2 = ["6","7","8","9","10"]
+            let shuffledRandomWords1 = randomWords1.shuffle()
+            let shuffledRandomWords2 = randomWords2.shuffle()
+            var correctAnswer: String = ""
+            for translations in translationsCurrently{
+                if nodePos.key == translations.key{
+                    correctAnswer = translations.value
+                    print("nodePos.key and translations.key match")
+                }
+               // print("Translations Key: ", translations.key)
+               // print("Translations Word: ", translations.value)
+
+            }
+            
+        //    let malayAnswer = returnTranslatedText(text2Translate: nodePos.key)
+         //   let malayWordArray = malayAnswer.components(separatedBy: ", ")
+        //    let trimmedMalayWord = malayWordArray[0]
+         //
+            var answerList:[String] = ["\(correctAnswer)","\(shuffledRandomWords1.chooseOne)","\(shuffledRandomWords2.chooseOne)"]
+            var shuffledAnswerList = answerList.shuffle()
+            DispatchQueue.main.async {
+                
+              /*
+                
+                // i.setTitle(answerList.sm_random(), for: .normal)
+                self.displayedAnswers = false
+                self.answerOne.setTitle(answerList[0], for: .normal)
+                self.answerTwo.setTitle(answerList[1], for: .normal)
+                self.answerThree.setTitle(answerList[2], for: .normal)
+                self.answerOne.isHidden = false
+                self.answerTwo.isHidden = false
+                self.answerThree.isHidden = false*/
+                
+            }
+            let qNode1 : SCNNode = self.createNewBubbleParentNode(answerList[0])
+            let qNode2 : SCNNode = self.createNewBubbleParentNode(answerList[1])
+            let qNode3 : SCNNode = self.createNewBubbleParentNode(answerList[2])
+
+            qNode1.position = SCNVector3Make(nodePos.value.x , nodePos.value.y + 0.1, nodePos.value.z)
+            qNode2.position = SCNVector3Make(nodePos.value.x , nodePos.value.y - 0.1, nodePos.value.z)
+            qNode3.position = SCNVector3Make(nodePos.value.x , nodePos.value.y, nodePos.value.z)
+
+            qNode1.name = answerList[0]
+            qNode2.name = answerList[1]
+            qNode3.name = answerList[2]
+
+            self.sceneView.scene.rootNode.addChildNode(qNode1)
+            self.sceneView.scene.rootNode.addChildNode(qNode2)
+            self.sceneView.scene.rootNode.childNodes.filter({ $0.name == nodePos.key }).forEach({ $0.removeFromParentNode() })
+            self.sceneView.scene.rootNode.addChildNode(qNode3)
+
+            //self.sceneView.scene.rootNode.replaceChildNode(self.sceneView.scene.rootNode.childNode(withName: nodePos.key, recursively: true)!, with: qNode3)
+            print("Correct Answer: ", correctAnswer)
+            print("Node Key: ", nodePos.key)
+            print("Node 1 Postion: ",qNode1.position)
+            print("Node 2 Postion: ",qNode2.position)
+
+        }
+    }
     @IBAction func switchValueDidChange(sender: DGRunkeeperSwitch!) {
         selectedButtonIndex = sender.selectedIndex
         print("valueChanged: \(sender.selectedIndex)")
@@ -77,8 +141,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     var displayedAnswers: Bool = false
     let bubbleDepth : Float = 0.01 // the 'depth' of 3D text
     var flashOn = false
-    var nodePositions = ["x": SCNVector3.init().x, "y": SCNVector3.init().y, "z": SCNVector3.init().z]
-    
+    var nodePositions = [String: SCNVector3]()
+    var translationsCurrently = [String: String]()
     //SwiftMessages Variables
     var swiftMsgView: MessageView? = nil
     
@@ -130,13 +194,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         sceneView.session.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         totConfidence = 0.0
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(gestureRecognize:)))
-        view.addGestureRecognizer(tapGesture)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
+        view.addGestureRecognizer(tapGestureRecognizer)
             //answerOne.isHidden = true
       //  answerTwo.isHidden = true
        // answerThree.isHidden = true
 
-        // Load the SKScene from 'Scene.sks'
         statusViewController.restartExperienceHandler = { [unowned self] in self.restartSession()}
         
         let runkeeperSwitch2 = DGRunkeeperSwitch()
@@ -169,6 +232,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
     }
     
+    @objc func handleTap(sender: UITapGestureRecognizer){
+        let touchLocation = sender.location(in: sceneView)
+        let hitTestResult = sceneView.hitTest(touchLocation, options: [:])
+        if !hitTestResult.isEmpty{
+            for result in hitTestResult{
+                print("Parent - Node Name: ", result.node.parent?.name)
+                print ("Parent - Node Position: ", result.node.parent?.position)
+                
+            }
+        }
+    }
     private func restartSession(){
         //   anchorLabels = [UUID: String]()
         //statusViewController.cancelAllScheduledMessages()
@@ -179,6 +253,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         
         //statusViewController.showMessage("RESTARTING SESSION")
     }
+    
     
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -535,10 +610,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
          if (averageConfidence > (self.objectConfidenceThreshold)){
          self.shouldProcessFrames = false
          print("Stopped Processing Frames")*/
+        let englishWordArray = topResult.identifier.components(separatedBy: ", ")
+        let trimmedEnglishWord = englishWordArray[0]
+        self.englishWord = trimmedEnglishWord
+        self.translateText(text2Translate: topResult.identifier)
         
         DispatchQueue.main.async {
             
-            // Print Classifications
+          /*  // Print Classifications
             print(topResult.identifier)
             
             // Create a transform with a translation of 0.2 meters in front of the camera
@@ -552,21 +631,31 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             ARShared.shared.anchorsToIdentifiers[anchor] = topResult.identifier
             
             // Set the identifier
-            self.sceneView.session.add(anchor: anchor)
+            self.sceneView.session.add(anchor: anchor)*/
            
-            
+            var translation = matrix_identity_float4x4
+            translation.columns.3.z = -0.2
+            let transform = simd_mul(self.currentFrame!.camera.transform , translation)
 
-                let worldCoord : SCNVector3 =  SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+            let worldCoord : SCNVector3 =  SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
                 
                 // Create 3D Text
-            let node : SCNNode = self.createNewBubbleParentNode(topResult.identifier)
+            let node : SCNNode = self.createNewBubbleParentNode(self.englishWord)
+            node.position = worldCoord
+            self.nodePositions[self.englishWord] = node.position
+            node.name = self.englishWord
             self.sceneView.scene.rootNode.addChildNode(node)
-                node.position = worldCoord
+          //  print("Node Name: ", self.nodePositions.index(forKey: topResult.identifier))
+            for nodePos in self.nodePositions{
                 
+                print("Node Pos Key: ", nodePos.key)
+                print("Node Pos Value: ", nodePos.value)
+
+            }
+          //  print("Node Position: ", self.nodePositions.first)
                 
 
-            self.englishWord = topResult.identifier
-            self.translateText(text2Translate: topResult.identifier)
+            
             // print("-------------")
           
 
@@ -580,6 +669,84 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         
         // Render Classifications
         
+    }
+    
+    func returnTranslatedText(text2Translate: String) -> (String){
+        
+            struct encodeText: Codable {
+                var text = String()
+            }
+            
+            let azureKey = "4ab01c02ee364f82ade642537439c4d3"
+            
+            let contentType = "application/json"
+            let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
+            let host = "dev.microsofttranslator.com"
+            let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=ms"
+            
+            
+        struct ReturnedJson: Codable {
+            var translations: [TranslatedStrings]
+        }
+        struct TranslatedStrings: Codable {
+            var text: String
+            var to: String
+        }
+        var langTranslations: Array<ReturnedJson?>? = nil
+        let jsonDecoder = JSONDecoder()
+            var encodeTextSingle = encodeText()
+            var toTranslate = [encodeText]()
+            encodeTextSingle.text = text2Translate
+            var noOfTranslations:Int = 0
+            toTranslate.append(encodeTextSingle)
+            
+            let encoder = JSONEncoder()
+            let jsonToTranslate = try? encoder.encode(toTranslate)
+            
+            let url = URL(string: apiURL)
+            var request = URLRequest(url: url!)
+            
+            request.httpMethod = "POST"
+            request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+            request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+            request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
+            request.addValue(host, forHTTPHeaderField: "Host")
+            request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
+            request.httpBody = jsonToTranslate
+            
+            let config = URLSessionConfiguration.default
+            let session =  URLSession(configuration: config)
+            var resData: Data? = nil
+            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                
+                if responseError != nil {
+                    print("this is the error ", responseError!)
+                    
+                    let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
+                    
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    
+                    self.present(alert, animated: true)
+                    
+                }
+                langTranslations = try! jsonDecoder.decode(Array<ReturnedJson>.self, from: responseData!)
+                print("*****")
+                noOfTranslations = (langTranslations?.count)! - 1
+
+                resData = responseData
+            }
+            task.resume()
+    
+
+        
+        
+            //*****TRANSLATION RETURNED DATA*****
+        
+        
+        
+            //Put response on main thread to update UI
+            
+        return langTranslations![0]!.translations[noOfTranslations].text
     }
     
     func translateText(text2Translate: String){
@@ -665,6 +832,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let malayWordsArr = malayWord.components(separatedBy: ",")
         wordModel.englishword = englishWordsArr[0]
         wordModel.malayword = malayWordsArr[0]
+        translationsCurrently[englishWordsArr[0]] = malayWordsArr[0]
         let detectedWord = learntWords.filter{ $0.englishword == wordModel.englishword }
         
         let wordExists = detectedWord.isEmpty
@@ -745,7 +913,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             self.statusViewController.showMessage("Malay:" + self.malayWord + " English: " + self.englishWord)
         }
     }
-    @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
+   /* @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
         // HIT TEST : REAL WORLD
         // Get Screen Centre
         let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
@@ -762,7 +930,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
            // sceneView.scene.rootNode.addChildNode(node)
            // node.position = worldCoord
         }
-    }
+    }*/
     
     func createNewBubbleParentNode(_ text : String) -> SCNNode {
         // Warning: Creating 3D Text is susceptible to crashing. To reduce chances of crashing; reduce number of polygons, letters, smoothness, etc.
@@ -849,10 +1017,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             return nil
         }
    
-        let labelNode = SKLabelNode(text: identifier)
-        labelNode.horizontalAlignmentMode = .center
+        let labelNode = SKLabelNode(text: "")
+      /*  labelNode.horizontalAlignmentMode = .center
         labelNode.verticalAlignmentMode = .center
-        labelNode.fontName = UIFont.boldSystemFont(ofSize: 16).fontName
+        labelNode.fontName = UIFont.boldSystemFont(ofSize: 16).fontName*/
         return labelNode
         
         
