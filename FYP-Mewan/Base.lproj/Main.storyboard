@@ -72,6 +72,13 @@
                                     <action selector="testButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="R1f-4q-cdb"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fp-2c-lNq">
+                                <rect key="frame" x="310" y="616" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="switchLearningMode:" destination="dSq-Iw-jw5" eventType="valueChanged" id="MbD-Zi-tV2"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -107,6 +114,7 @@
                         <outlet property="flashImage" destination="slm-dU-3Mw" id="tVY-HS-mxh"/>
                         <outlet property="flashToggleButton" destination="8Ch-KO-tG8" id="F3g-z1-I3X"/>
                         <outlet property="imagePreview" destination="FsH-1M-Tbd" id="JLN-WC-a6v"/>
+                        <outlet property="learningMode" destination="5fp-2c-lNq" id="rIZ-MZ-NZD"/>
                         <outlet property="sceneView" destination="wH7-cU-1j1" id="JvJ-Jp-Paa"/>
                     </connections>
                 </viewController>
