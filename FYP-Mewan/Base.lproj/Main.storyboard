@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -63,13 +64,6 @@
                                     <action selector="testButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="R1f-4q-cdb"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fp-2c-lNq">
-                                <rect key="frame" x="310" y="616" width="49" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="switchLearningMode:" destination="dSq-Iw-jw5" eventType="valueChanged" id="MbD-Zi-tV2"/>
-                                </connections>
-                            </switch>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yOb-kS-gzp">
                                 <rect key="frame" x="0.0" y="20" width="260" height="627"/>
                                 <subviews>
@@ -78,6 +72,60 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="WOb-Tm-s5h">
                                             <rect key="frame" x="0.0" y="0.0" width="260" height="627"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fp-2c-lNq">
+                                                    <rect key="frame" x="107" y="176" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="switchLearningMode:" destination="dSq-Iw-jw5" eventType="valueChanged" id="MbD-Zi-tV2"/>
+                                                    </connections>
+                                                </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Learning Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ic-sx-Odx">
+                                                    <rect key="frame" x="73" y="147" width="115" height="21"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detection Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBT-Tj-lpN">
+                                                    <rect key="frame" x="69" y="8" width="123" height="21"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Language Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UvQ-sI-IEi">
+                                                    <rect key="frame" x="68" y="75" width="124" height="21"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Image Processing Preview" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OyJ-ab-rgV">
+                                                    <rect key="frame" x="37" y="215" width="201" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UXY-TX-Zfn">
+                                                    <rect key="frame" x="107" y="244" width="49" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="imagePreviewToggleValueDidChange:" destination="dSq-Iw-jw5" eventType="valueChanged" id="nTa-xC-uov"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5fp-2c-lNq" firstAttribute="leading" secondItem="WOb-Tm-s5h" secondAttribute="leading" constant="107" id="6lr-Mb-WUs"/>
+                                                <constraint firstItem="5fp-2c-lNq" firstAttribute="top" secondItem="WOb-Tm-s5h" secondAttribute="top" constant="176" id="Cfg-JP-DBr"/>
+                                                <constraint firstItem="UvQ-sI-IEi" firstAttribute="top" secondItem="QBT-Tj-lpN" secondAttribute="bottom" constant="46" id="Z2Z-r6-XrJ"/>
+                                                <constraint firstItem="5fp-2c-lNq" firstAttribute="top" secondItem="3Ic-sx-Odx" secondAttribute="bottom" constant="8" symbolic="YES" id="diX-9h-IeO"/>
+                                                <constraint firstItem="QBT-Tj-lpN" firstAttribute="top" secondItem="WOb-Tm-s5h" secondAttribute="topMargin" id="f8j-tV-bZW"/>
+                                                <constraint firstItem="UvQ-sI-IEi" firstAttribute="centerX" secondItem="3Ic-sx-Odx" secondAttribute="centerX" id="hkb-ya-OOR"/>
+                                                <constraint firstItem="QBT-Tj-lpN" firstAttribute="centerX" secondItem="WOb-Tm-s5h" secondAttribute="centerX" id="kAX-Ct-ooc"/>
+                                                <constraint firstItem="QBT-Tj-lpN" firstAttribute="trailing" secondItem="UvQ-sI-IEi" secondAttribute="trailing" id="ycA-bx-WEt"/>
+                                            </constraints>
                                         </view>
                                         <blurEffect style="light"/>
                                     </visualEffectView>
@@ -121,6 +169,7 @@
                         <outlet property="flashImage" destination="slm-dU-3Mw" id="tVY-HS-mxh"/>
                         <outlet property="flashToggleButton" destination="8Ch-KO-tG8" id="F3g-z1-I3X"/>
                         <outlet property="imagePreview" destination="FsH-1M-Tbd" id="JLN-WC-a6v"/>
+                        <outlet property="imagePreviewToggle" destination="UXY-TX-Zfn" id="uhV-0K-vpc"/>
                         <outlet property="leadingConstraint" destination="EdN-5O-IfT" id="NXg-61-bdi"/>
                         <outlet property="learningMode" destination="5fp-2c-lNq" id="rIZ-MZ-NZD"/>
                         <outlet property="sceneView" destination="wH7-cU-1j1" id="JvJ-Jp-Paa"/>

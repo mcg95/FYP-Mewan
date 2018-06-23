@@ -132,6 +132,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
     }
     
+    @IBOutlet weak var imagePreviewToggle: UISwitch!
+    
+    @IBAction func imagePreviewToggleValueDidChange(_ sender: Any) {
+        if imagePreviewToggle.isOn == false{
+            imagePreview.isHidden = true
+        }else{
+            showImagePreview = true
+            imagePreview.isHidden = false
+
+        }
+    }
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     private var currentFrame: ARFrame?
@@ -171,6 +182,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     var learningModeEnabled = false
     var tappedNodeName: String?
     var prevResult:String?
+    var showImagePreview = false
     // If false, test and translation is done from Malay to English. If true, test and translation is done from English to Malay
     var malayEnglishToggle = false
     //CoreData Model Array
@@ -310,10 +322,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         runkeeperSwitch2.titleColor = .white
         runkeeperSwitch2.selectedTitleColor = UIColor(red: 239.0/255.0, green: 95.0/255.0, blue: 49.0/255.0, alpha: 1.0)
         runkeeperSwitch2.titleFont = UIFont(name: "HelveticaNeue-Medium", size: 13.0)
-        runkeeperSwitch2.frame = CGRect(x: 50.0, y: 20.0, width: view.bounds.width - 100.0, height: 30.0)
+        runkeeperSwitch2.frame = CGRect(x: 20.0, y: 36.0, width: sideView.bounds.width - 50.0, height: 30.0)
         runkeeperSwitch2.autoresizingMask = [.flexibleWidth] // This is needed if you want the control to resize
-        view.addSubview(runkeeperSwitch2)
-        
+        sideView.addSubview(runkeeperSwitch2)
+
         runkeeperSwitch2.addTarget(self, action: #selector(ViewController.modeToggleValueDidChange(sender:)), for: .valueChanged )
     }
     func setupLangToggle(){
@@ -324,9 +336,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         runkeeperSwitch2.titleColor = .white
         runkeeperSwitch2.selectedTitleColor = UIColor(red: 239.0/255.0, green: 95.0/255.0, blue: 49.0/255.0, alpha: 1.0)
         runkeeperSwitch2.titleFont = UIFont(name: "HelveticaNeue-Medium", size: 13.0)
-        runkeeperSwitch2.frame = CGRect(x: 50.0, y: 60.0, width: view.bounds.width - 100.0, height: 30.0)
+        runkeeperSwitch2.frame = CGRect(x: 20.0, y: 100.0, width: sideView.bounds.width - 50.0, height: 30.0)
         runkeeperSwitch2.autoresizingMask = [.flexibleWidth] // This is needed if you want the control to resize
-        view.addSubview(runkeeperSwitch2)
+        sideView.addSubview(runkeeperSwitch2)
         
         runkeeperSwitch2.addTarget(self, action: #selector(ViewController.langToggleValueDidChange(sender:)), for: .valueChanged )
     }
@@ -465,7 +477,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         else if selectedButtonIndex == 1{
             if shouldProcessFrames == true{
                  DispatchQueue.main.async {
-                    self.imagePreview.isHidden = true
                     
                 }
                 setupVision()
@@ -737,6 +748,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let pixbuff : CVPixelBuffer? = (sceneView.session.currentFrame?.capturedImage)
         if pixbuff == nil { return }
         let ciImage = CIImage(cvPixelBuffer: pixbuff!)
+        let uIImage = UIImage(ciImage: ciImage)
+        let rotatedImgFinal = uIImage.rotate(radians: .pi/2)
+
+        DispatchQueue.main.async {
+            self.imagePreview.image = rotatedImgFinal
+
+        }
+
         
         // Prepare CoreML/Vision Request
         let imageRequestHandler = VNImageRequestHandler(ciImage: ciImage, options: [:])
@@ -744,6 +763,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         // Run Vision Image Request
         do {
             try imageRequestHandler.perform(self.visionRequests)
+
         } catch {
             print(error)
         }
@@ -1290,14 +1310,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                
 
                 
-               // i.setTitle(answerList.sm_random(), for: .normal)
-                self.displayedAnswers = false
-                self.answerOne.setTitle(answerList[0], for: .normal)
-                self.answerTwo.setTitle(answerList[1], for: .normal)
-                self.answerThree.setTitle(answerList[2], for: .normal)
-                self.answerOne.isHidden = false
-                self.answerTwo.isHidden = false
-                self.answerThree.isHidden = false
+             
                 
         }
       
