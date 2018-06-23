@@ -232,14 +232,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         setupLangToggle()
         countdownLabel.isHidden = true
         flashImage.image = #imageLiteral(resourceName: "flashOff")
+        setupSlideInMenu()
+        guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
+            fatalError("can't load Object model")
+        }
+        fetchLearntWordsCoreData()
+     
+    }
+    
+    func setupSlideInMenu(){
         blurView.layer.cornerRadius = 15
         sideView.layer.shadowColor = UIColor.black.cgColor
         sideView.layer.shadowOpacity = 0.8
         sideView.layer.shadowOffset = CGSize(width: 5, height: 0)
         leadingConstraint.constant = -260
-        guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
-            fatalError("can't load Object model")
-        }
+    }
+    
+    func fetchLearntWordsCoreData(){
         let fetchRequest:NSFetchRequest<LearntWords> = LearntWords.fetchRequest()
         
         do{
@@ -251,8 +260,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             print("CoreDataService Fetch Request Failed")
         }
     }
-    
-    
     @IBAction func panPerformed(_ sender: UIPanGestureRecognizer) {
         
         if sender.state == .began || sender.state == .changed{
