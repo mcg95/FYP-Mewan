@@ -54,6 +54,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     @IBOutlet weak var countdownLabel: SRCountdownTimer!
     
+    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var blurView: UIVisualEffectView!
+    @IBOutlet weak var sideView: UIView!
     @IBAction func testButton(_ sender: Any) {
         testScore = 0
         learningModeEnabled = false
@@ -97,7 +100,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             qNode1.name = answerList[0]
             qNode2.name = answerList[1]
             qNode3.name = "Correct Answer"
-
+            
             self.sceneView.scene.rootNode.addChildNode(qNode1)
             self.sceneView.scene.rootNode.addChildNode(qNode2)
             self.sceneView.scene.rootNode.childNodes.filter({ $0.name == nodePos.key }).forEach({ $0.removeFromParentNode() })
@@ -229,7 +232,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         setupLangToggle()
         countdownLabel.isHidden = true
         flashImage.image = #imageLiteral(resourceName: "flashOff")
-        
+        blurView.layer.cornerRadius = 15
+        sideView.layer.shadowColor = UIColor.black.cgColor
+        sideView.layer.shadowOpacity = 0.8
+        sideView.layer.shadowOffset = CGSize(width: 5, height: 0)
+        leadingConstraint.constant = -260
         guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("can't load Object model")
         }
@@ -238,10 +245,54 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         do{
             let lWords = try CoreDataService.context.fetch(fetchRequest)
             self.learntWords = lWords
+            
         }
         catch{
             print("CoreDataService Fetch Request Failed")
         }
+    }
+    
+    
+    @IBAction func panPerformed(_ sender: UIPanGestureRecognizer) {
+        
+        if sender.state == .began || sender.state == .changed{
+            
+            let translation = sender.translation(in: self.view).x
+            if translation > 0 {
+                
+                if leadingConstraint.constant < 20 {
+                    UIView.animate(withDuration: 0.2) {
+                        self.leadingConstraint.constant += translation / 10
+                        self.view.layoutIfNeeded()
+                    }
+                }
+                
+            } else {
+                
+                if leadingConstraint.constant > -260 {
+                    UIView.animate(withDuration: 0.2) {
+                        self.leadingConstraint.constant += translation / 10
+                        self.view.layoutIfNeeded()
+                    }
+                }
+            }
+            
+        }else if sender.state == .ended{
+            
+            if leadingConstraint.constant < -100 {
+                UIView.animate(withDuration: 0.2) {
+                    self.leadingConstraint.constant = -260
+                    self.view.layoutIfNeeded()
+                }
+            } else {
+                UIView.animate(withDuration: 0.2) {
+                    self.leadingConstraint.constant = 0
+                    self.view.layoutIfNeeded()
+                }
+            }
+            
+        }
+        
     }
     
     func setupModeToggle(){
@@ -699,6 +750,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     func classificationCompleteHandler(request: VNRequest, error: Error?) {
         // Catch Errors
         print("running frames")
+        var shouldTranslateWord: Bool = false
         var result = ""
         DispatchQueue.global().async {
         if error != nil {
@@ -720,24 +772,41 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let englishWordArray = result.components(separatedBy: ", ")
             let trimmedEnglishWord = englishWordArray[0]
             self.englishWord = trimmedEnglishWord
-        
+            
             for word in self.learntWords{
-                if word.englishword == self.englishWord{
+                if word.englishword == trimmedEnglishWord{
+                    
                     self.malayWord = word.malayword!
-                    print("Word found in CoreData!")
-                    self.addNodeForClassification()
-                } else{
-                    break
-
+                    //print("Word found in CoreData!")
+                    
+                    if self.prevResult == trimmedEnglishWord{
+                        
+                        print("Node already added")
+                    }else{
+                        self.translateTextToMalay(text2Translate: trimmedEnglishWord)
+                        self.addNodeForClassification()
+                        print("Word added from CoreData!")
+                        
+                    }
                 }
             }
-                if self.prevResult == trimmedEnglishWord{
-                    print("Node already added")
-                }else{
-                    self.prevResult = trimmedEnglishWord
-                    self.translateTextToMalay(text2Translate: trimmedEnglishWord)
+        
+            
+            
+            
+            if shouldTranslateWord == true{
+            if self.prevResult == trimmedEnglishWord{
+                print("Node already added")
+                shouldTranslateWord = false
+
+            }else{
+                shouldTranslateWord = false
+                self.prevResult = trimmedEnglishWord
+                self.translateTextToMalay(text2Translate: trimmedEnglishWord)
+                print("Word sent for translation")
+            
             }
-            print("Word sent for translation")
+            }
         }
 
         /*  self.totConfidence += topResult.confidence
