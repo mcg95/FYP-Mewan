@@ -15,6 +15,8 @@ import DGRunkeeperSwitch
 import CoreData
 import SwiftMessages
 import SRCountdownTimer
+import SwiftyButton
+
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
     
@@ -57,10 +59,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var blurView: UIVisualEffectView!
     @IBOutlet weak var sideView: UIView!
+    
+    @IBOutlet weak var startTestButton: PressableButton!
     @IBAction func testButton(_ sender: Any) {
+        if sceneView.scene.rootNode.childNodes.count > 0{
         testScore = 0
         learningModeEnabled = false
-        learningMode.isHidden = true
+        learningMode.isEnabled = false
         for nodePos in nodePositions{
             // Create 3D Text
             
@@ -113,8 +118,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             print("Node 2 Postion: ",qNode2.position)
 
         }
-        setupScoreboard()
+        startTestButton.isHidden = true
+        stopTestButton.isHidden = false
+            setupScoreboard()}
+        else{
+            print("No Nodes Detected in Environment")
+        }
 
+    }
+    
+   
+    @IBOutlet weak var stopTestButton: PressableButton!
+    @IBAction func stopTestButton(_ sender: Any) {
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode()
+            
+        }
+        stopTestButton.isHidden = true
+        startTestButton.isHidden = false
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.setValue(testScore, forKey: "score")
+        userDefaults.synchronize()
+        if userDefaults.data(forKey: "score") != nil{
+        userScores = userDefaults.array(forKey: "score") as! [Int]
+        print(userScores)
+        }
+        
     }
     @IBAction func modeToggleValueDidChange(sender: DGRunkeeperSwitch!) {
         selectedButtonIndex = sender.selectedIndex
@@ -183,6 +213,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     var tappedNodeName: String?
     var prevResult:String?
     var showImagePreview = false
+    var userScores:[Int] = []
     // If false, test and translation is done from Malay to English. If true, test and translation is done from English to Malay
     var malayEnglishToggle = false
     //CoreData Model Array
@@ -237,13 +268,27 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             //answerOne.isHidden = true
       //  answerTwo.isHidden = true
        // answerThree.isHidden = true
-
+        
+        startTestButton.colors = .init(button: .green, shadow: .black)
+        startTestButton.cornerRadius = 10
+        startTestButton.isHidden = false
+        startTestButton.titleLabel?.text = "Start Test"
+        stopTestButton.colors = .init(button: .red, shadow: .black)
+        startTestButton.titleLabel?.text = "Stop Test"
+        stopTestButton.isHidden = true
+        
+        let userDefaults = UserDefaults.standard
+        if userDefaults.data(forKey: "score") != nil {
+        userScores = userDefaults.array(forKey: "score") as! [Int]
+        }
+        
         statusViewController.restartExperienceHandler = { [unowned self] in self.restartSession()}
         learningMode.isOn = false
         setupModeToggle()
         setupLangToggle()
         countdownLabel.isHidden = true
         flashImage.image = #imageLiteral(resourceName: "flashOff")
+        imagePreview.isHidden = true
         setupSlideInMenu()
         guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("can't load Object model")

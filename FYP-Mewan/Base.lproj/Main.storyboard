@@ -56,14 +56,6 @@
                                 <rect key="frame" x="13" y="607" width="53" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W9P-KB-bEj">
-                                <rect key="frame" x="71" y="607" width="56" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Test"/>
-                                <connections>
-                                    <action selector="testButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="R1f-4q-cdb"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yOb-kS-gzp">
                                 <rect key="frame" x="0.0" y="20" width="260" height="627"/>
                                 <subviews>
@@ -108,7 +100,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UXY-TX-Zfn">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="UXY-TX-Zfn">
                                                     <rect key="frame" x="107" y="244" width="49" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <connections>
@@ -139,6 +131,28 @@
                                     <constraint firstItem="MMi-Kp-Qas" firstAttribute="centerY" secondItem="yOb-kS-gzp" secondAttribute="centerY" constant="-1" id="rWS-qT-D08"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7K9-ey-pra" customClass="PressableButton" customModule="SwiftyButton">
+                                <rect key="frame" x="115" y="599" width="144" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <state key="normal" title="Stop Test">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="stopTestButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="hBw-Cy-C8R"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W9P-KB-bEj" customClass="PressableButton" customModule="SwiftyButton">
+                                <rect key="frame" x="88" y="607" width="198" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="21"/>
+                                <state key="normal" title="Start Test">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="testButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="R1f-4q-cdb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -174,6 +188,8 @@
                         <outlet property="learningMode" destination="5fp-2c-lNq" id="rIZ-MZ-NZD"/>
                         <outlet property="sceneView" destination="wH7-cU-1j1" id="JvJ-Jp-Paa"/>
                         <outlet property="sideView" destination="yOb-kS-gzp" id="Tyr-qi-5H4"/>
+                        <outlet property="startTestButton" destination="W9P-KB-bEj" id="1X3-yX-PaU"/>
+                        <outlet property="stopTestButton" destination="7K9-ey-pra" id="6o7-IV-Bnv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RW1-vf-95r" userLabel="First Responder" sceneMemberID="firstResponder"/>
