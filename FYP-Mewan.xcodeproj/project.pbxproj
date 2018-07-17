@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		420FAB18B4BDC56752A58B68 /* Pods_FYP_MewanTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD12081CAE1BDB2A9178EEF /* Pods_FYP_MewanTests.framework */; };
+		71628AAD20FCF04C00424A81 /* SwiftMessagesNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71628AAC20FCF04C00424A81 /* SwiftMessagesNotification.swift */; };
 		717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F03209A035D00B44878 /* AppDelegate.swift */; };
 		717A4F06209A035D00B44878 /* Scene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 717A4F05209A035D00B44878 /* Scene.sks */; };
 		717A4F08209A035D00B44878 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F07209A035D00B44878 /* Scene.swift */; };
@@ -28,6 +29,7 @@
 		717A4F5F20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F5D20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift */; };
 		717A4F6020AA2B5B00B44878 /* LearntWords+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F5E20AA2B5B00B44878 /* LearntWords+CoreDataClass.swift */; };
 		717A4F6320CABD8F00B44878 /* ARShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717A4F6220CABD8F00B44878 /* ARShared.swift */; };
+		71F8FA9020FAA63800D05AF9 /* OCR.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 71F8FA8F20FAA63700D05AF9 /* OCR.mlmodel */; };
 		9142A37BCDB8B11D9D6403C1 /* Pods_FYP_Mewan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */; };
 		BD2CDFA4FAC99DBBCB009037 /* Pods_FYP_MewanUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3F745035F9A206DC80676E9 /* Pods_FYP_MewanUITests.framework */; };
 /* End PBXBuildFile section */
@@ -53,6 +55,7 @@
 		1F7160E6CC667E1B36EC94AC /* Pods-FYP-Mewan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-Mewan.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan.debug.xcconfig"; sourceTree = "<group>"; };
 		2CD12081CAE1BDB2A9178EEF /* Pods_FYP_MewanTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_MewanTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C6BB471BB218AC4A1D21209 /* Pods-FYP-MewanTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanTests/Pods-FYP-MewanTests.debug.xcconfig"; sourceTree = "<group>"; };
+		71628AAC20FCF04C00424A81 /* SwiftMessagesNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftMessagesNotification.swift; sourceTree = "<group>"; };
 		717A4F00209A035D00B44878 /* FYP-Mewan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FYP-Mewan.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		717A4F03209A035D00B44878 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		717A4F05209A035D00B44878 /* Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Scene.sks; sourceTree = "<group>"; };
@@ -79,6 +82,7 @@
 		717A4F5D20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LearntWords+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		717A4F5E20AA2B5B00B44878 /* LearntWords+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LearntWords+CoreDataClass.swift"; sourceTree = "<group>"; };
 		717A4F6220CABD8F00B44878 /* ARShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARShared.swift; sourceTree = "<group>"; };
+		71F8FA8F20FAA63700D05AF9 /* OCR.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = OCR.mlmodel; sourceTree = "<group>"; };
 		763D888DB7AF7E4B00CF9333 /* Pods-FYP-MewanUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-MewanUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-MewanUITests/Pods-FYP-MewanUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8642908D0FF794FB150D5665 /* Pods_FYP_Mewan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FYP_Mewan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FYP-Mewan.release.xcconfig"; path = "Pods/Target Support Files/Pods-FYP-Mewan/Pods-FYP-Mewan.release.xcconfig"; sourceTree = "<group>"; };
@@ -153,6 +157,7 @@
 		717A4F02209A035D00B44878 /* FYP-Mewan */ = {
 			isa = PBXGroup;
 			children = (
+				71F8FA8F20FAA63700D05AF9 /* OCR.mlmodel */,
 				717A4F5E20AA2B5B00B44878 /* LearntWords+CoreDataClass.swift */,
 				717A4F5D20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift */,
 				717A4F4420AA242000B44878 /* LearntWords.xcdatamodeld */,
@@ -172,6 +177,7 @@
 				717A4F13209A036100B44878 /* Info.plist */,
 				717A4F4720AA24EF00B44878 /* CoreDataService.swift */,
 				717A4F6220CABD8F00B44878 /* ARShared.swift */,
+				71628AAC20FCF04C00424A81 /* SwiftMessagesNotification.swift */,
 			);
 			path = "FYP-Mewan";
 			sourceTree = "<group>";
@@ -424,10 +430,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				717A4F3D209A05D800B44878 /* StatusViewController.swift in Sources */,
+				71F8FA9020FAA63800D05AF9 /* OCR.mlmodel in Sources */,
 				717A4F4620AA242000B44878 /* LearntWords.xcdatamodeld in Sources */,
 				717A4F40209B62E000B44878 /* Inceptionv3.mlmodel in Sources */,
 				717A4F5F20AA2B5B00B44878 /* LearntWords+CoreDataProperties.swift in Sources */,
 				717A4F0A209A035D00B44878 /* ViewController.swift in Sources */,
+				71628AAD20FCF04C00424A81 /* SwiftMessagesNotification.swift in Sources */,
 				717A4F08209A035D00B44878 /* Scene.swift in Sources */,
 				717A4F3C209A05D800B44878 /* TemplateLabelNode.swift in Sources */,
 				717A4F04209A035D00B44878 /* AppDelegate.swift in Sources */,
@@ -610,13 +618,18 @@
 			baseConfigurationReference = 1F7160E6CC667E1B36EC94AC /* Pods-FYP-Mewan.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-Mewan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -627,13 +640,18 @@
 			baseConfigurationReference = 8BED77F629A96D0DA56E416B /* Pods-FYP-Mewan.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-Mewan/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-Mewan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -648,7 +666,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -666,7 +688,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -683,7 +709,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -700,7 +730,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2D3474FP86;
 				INFOPLIST_FILE = "FYP-MewanUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "MewanC.FYP-MewanUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

@@ -20,6 +20,63 @@ import SwiftyButton
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UIGestureRecognizerDelegate {
     
+    // The pixel buffer being held for analysis; used to serialize Vision requests.
+    private var currentBuffer: CVPixelBuffer?
+    private var currentFrame: ARFrame?
+    // Queue for dispatching vision classification requests
+    private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
+    
+    // Classification results
+    private var identifierString = ""
+    private var confidence: VNConfidence = 0.0
+    private var selectedButtonIndex = 0
+    var visionRequests = [VNRequest]()
+    
+    // Labels for classified objects by ARAnchor UUID
+    private var anchorLabels = [UUID: String]()
+    
+    var textMetadata = [Int: [Int: String]]()
+    
+    let textChecker = UITextChecker()
+    var correctStr: String = String()
+    private var confidenceThreshold: Double = 0.75
+    private var objectConfidenceThreshold: Double = 0.4
+    private var totConfidence: VNConfidence = 0.0
+    var shouldProcessFrames = true
+    var ranFunctionTimer = false
+    var englishWord = ""
+    var malayWord = ""
+    var displayedAnswers: Bool = false
+    let bubbleDepth : Float = 0.01 // the 'depth' of 3D text
+    var flashOn = false
+    var nodePositions = [String: SCNVector3]()
+    var translationsCurrently = [String: String]()
+    var detectedTextTranslations = [String: String]()
+    //SwiftMessages Variables
+    var swiftMsgView: MessageView? = nil
+    var nodeAdded:Bool = false
+    var testScore:Int = 0
+    var learningModeEnabled = false
+    var tappedNodeName: String?
+    var prevResult:String?
+    var showImagePreview = false
+    var userScores:[Int] = []
+    let swiftMessages = SwiftMessagesNotification()
+    // If false, test and translation is done from Malay to English. If true, test and translation is done from English to Malay
+    var malayEnglishToggle = false
+    //CoreData Model Array
+    var learntWords = [LearntWords]()
+    var currentDetectedWord: String?
+    
+    var randomMalayWords1 = ["kepala","komputer","epal","beg","bola"]
+    var randomMalayWords2 = ["kasut","anjing","kerusi","meja","keretapi"]
+    
+    var randomEnglishWords1 = ["head","computer","apple","bag","ball"]
+    var randomEnglishWords2 = ["shoe","dog","chair","table","train"]
+    
+    
+    
+    
     @IBOutlet weak var imagePreview: UIImageView!
     
     @IBOutlet weak var sceneView: ARSCNView!
@@ -62,35 +119,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     @IBOutlet weak var startTestButton: PressableButton!
     @IBAction func testButton(_ sender: Any) {
+        var shuffledRandomWords1: [String]?
+        var shuffledRandomWords2: [String]?
+         if selectedButtonIndex == 1 {
         if sceneView.scene.rootNode.childNodes.count > 0{
         testScore = 0
         learningModeEnabled = false
         learningMode.isEnabled = false
         for nodePos in nodePositions{
             // Create 3D Text
+        
             
-            var randomWords1 = ["1","2","3","4","5"]
-            var randomWords2 = ["6","7","8","9","10"]
-            let shuffledRandomWords1 = randomWords1.shuffle()
-            let shuffledRandomWords2 = randomWords2.shuffle()
+            if malayEnglishToggle == false{
+             shuffledRandomWords1 = randomMalayWords1.shuffle()
+            shuffledRandomWords2 = randomMalayWords2.shuffle()
+            } else{
+                shuffledRandomWords1 = randomEnglishWords1.shuffle()
+                shuffledRandomWords2 = randomEnglishWords2.shuffle()
+            }
             var correctAnswer: String = ""
             for translations in translationsCurrently{
                 if nodePos.key == translations.key{
                     correctAnswer = translations.value
                     print("nodePos.key and translations.key match")
                 }
-               // print("Translations Key: ", translations.key)
-               // print("Translations Word: ", translations.value)
-
             }
-            
-        //    let malayAnswer = returnTranslatedText(text2Translate: nodePos.key)
-         //   let malayWordArray = malayAnswer.components(separatedBy: ", ")
-        //    let trimmedMalayWord = malayWordArray[0]
-         //
-            var answerList:[String] = ["\(shuffledRandomWords1.chooseOne)","\(shuffledRandomWords2.chooseOne)"]
+            var answerList:[String] = ["\(shuffledRandomWords1!.chooseOne)","\(shuffledRandomWords2!.chooseOne)"]
             var shuffledAnswerList = answerList.shuffle()
-           
             let qNode1 : SCNNode = self.createNewBubbleParentNode(answerList[0])
             let qNode2 : SCNNode = self.createNewBubbleParentNode(answerList[1])
             let qNode3 : SCNNode = self.createNewBubbleParentNode(correctAnswer)
@@ -101,7 +156,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             qNode1.position = shuffledNodePos[0]
             qNode2.position = shuffledNodePos[1]
             qNode3.position = shuffledNodePos[2]
-
+            
             qNode1.name = answerList[0]
             qNode2.name = answerList[1]
             qNode3.name = "Correct Answer"
@@ -110,24 +165,171 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             self.sceneView.scene.rootNode.addChildNode(qNode2)
             self.sceneView.scene.rootNode.childNodes.filter({ $0.name == nodePos.key }).forEach({ $0.removeFromParentNode() })
             self.sceneView.scene.rootNode.addChildNode(qNode3)
-
-            //self.sceneView.scene.rootNode.replaceChildNode(self.sceneView.scene.rootNode.childNode(withName: nodePos.key, recursively: true)!, with: qNode3)
-            print("Correct Answer: ", correctAnswer)
-            print("Node Key: ", nodePos.key)
-            print("Node 1 Postion: ",qNode1.position)
-            print("Node 2 Postion: ",qNode2.position)
-
+            
         }
         startTestButton.isHidden = true
         stopTestButton.isHidden = false
-            setupScoreboard()}
-        else{
+            setupScoreboard()
+            
+        }else{
             print("No Nodes Detected in Environment")
+            }
+            
+         } else{
+            
+            if sceneView.scene.rootNode.childNodes.count > 0{
+                testScore = 0
+                learningModeEnabled = false
+                learningMode.isEnabled = false
+                for nodePos in nodePositions{
+                    // Create 3D Text
+                    if malayEnglishToggle == false{
+                        shuffledRandomWords1 = randomMalayWords1.shuffle()
+                        shuffledRandomWords2 = randomMalayWords2.shuffle()
+                    } else{
+                        shuffledRandomWords1 = randomEnglishWords1.shuffle()
+                        shuffledRandomWords2 = randomEnglishWords2.shuffle()
+                    }
+                    var correctAnswer: String = ""
+                    DispatchQueue.global().async {
+                        for translations in self.detectedTextTranslations{
+                            if nodePos.key == translations.key{
+                                correctAnswer = translations.value
+                                print("nodePos.key and translations.key match")
+                            }
+                        }
+                    }
+                    
+                    var answerList:[String] = ["\(shuffledRandomWords1!.chooseOne)","\(shuffledRandomWords2!.chooseOne)"]
+                    var shuffledAnswerList = answerList.shuffle()
+                    let qNode1 : SCNNode = self.createNewBubbleParentNode(answerList[0])
+                    let qNode2 : SCNNode = self.createNewBubbleParentNode(answerList[1])
+                    let qNode3 : SCNNode = self.createNewBubbleParentNode(correctAnswer)
+                    
+                    var nodePosShuffleArray = [SCNVector3Make(nodePos.value.x , nodePos.value.y + 0.1, nodePos.value.z),SCNVector3Make(nodePos.value.x , nodePos.value.y - 0.1, nodePos.value.z), SCNVector3Make(nodePos.value.x , nodePos.value.y, nodePos.value.z)]
+                    var shuffledNodePos = nodePosShuffleArray.shuffle()
+                    
+                    qNode1.position = shuffledNodePos[0]
+                    qNode2.position = shuffledNodePos[1]
+                    qNode3.position = shuffledNodePos[2]
+                    
+                    qNode1.name = answerList[0]
+                    qNode2.name = answerList[1]
+                    qNode3.name = "Correct Answer"
+                    
+                    self.sceneView.scene.rootNode.addChildNode(qNode1)
+                    self.sceneView.scene.rootNode.addChildNode(qNode2)
+                    self.sceneView.scene.rootNode.childNodes.filter({ $0.name == nodePos.key }).forEach({ $0.removeFromParentNode() })
+                    self.sceneView.scene.rootNode.addChildNode(qNode3)
+                }
+                startTestButton.isHidden = true
+                stopTestButton.isHidden = false
+                setupScoreboard()
+            }else{
+                print("No Nodes Detected in Environment")
+            }
         }
-
     }
     
-   
+    @IBOutlet weak var startDetect: UIButton!
+    @IBAction func startDetectButton(_ sender: Any) {
+        shouldProcessFrames = true
+        stopDetect.isHidden = false
+        startDetect.isHidden = true
+    }
+    @IBOutlet weak var stopDetect: UIButton!
+    
+    @IBAction func stopDetectButton(_ sender: Any) {
+        var result: String = (currentDetectedWord?.lowercased())!
+        
+            stopDetect.isHidden = true
+            startDetect.isHidden = false
+        self.shouldProcessFrames = false
+        let textChecker = UITextChecker()
+        let misspelledRange = textChecker.rangeOfMisspelledWord(
+            in: result, range: NSRange(0..<result.count), startingAt: 0, wrap: false, language: "en_US")
+        
+        if misspelledRange.location != NSNotFound,
+            let guesses = textChecker.guesses(forWordRange: misspelledRange, in: result, language: "en_US") {
+            if guesses.first != nil{
+                correctStr = guesses.first!
+                print("Corrected Result: " + correctStr)
+                self.englishWord = correctStr
+                checkForTextCoreData(correctStr: correctStr)
+                self.prevResult = correctStr
+            } else {
+                swiftMessages.displayNotification(layout: .cardView, title: "Error", body: "No words found in detected letters! Please try again!", presentationStyle: .bottom, iconText: "⚠️", backgroundColor: UIColor.init(red: 255, green: 0, blue: 0, alpha: 0.8))
+            }
+            
+            
+        }
+    }
+    
+    func checkForObjectCoreData(objectName: String){
+        let wordModel = LearntWords(context: CoreDataService.context)
+        //wordModel.englishword = objectName
+        let detectedWord = learntWords.filter{ $0.englishword == objectName }
+        let wordExists = detectedWord.isEmpty
+        if wordExists == false{
+            
+            self.shouldProcessFrames = false
+            for word in learntWords{
+                if word.malayword == nil{
+                    
+                }else{
+                    malayWord = word.malayword!
+                    englishWord = word.englishword!
+                }
+            }
+            
+            print("Node added from CoreData!")
+            addNodeForObjectClassification()
+          
+        }else if wordExists == true{
+            self.shouldProcessFrames = false
+            swiftMessages.displayNotification(layout: .cardView, title: "New Word", body: "Saved into Local Data", presentationStyle: .top, iconText: "✅", backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8))
+            
+            translateTextToMalay(text2Translate: englishWord)
+           
+        }
+       
+    }
+    func checkForTextCoreData(correctStr: String){
+        let wordModel = LearntWords(context: CoreDataService.context)
+        //wordModel.englishword = correctStr
+        //let tempSave = LearntWords(context: CoreDataService.context)
+        let detectedWord = learntWords.filter{ $0.englishword == correctStr }
+        let wordExists = detectedWord.isEmpty
+        if wordExists == false{
+            
+            self.shouldProcessFrames = false
+            for word in detectedWord{
+                if word.malayword == nil{
+                    
+               
+                    
+                }else{
+                    malayWord = word.malayword!
+                    englishWord = word.englishword!
+                }
+               //word.englishword?.removeAll()
+               //word.malayword?.removeAll()
+               //CoreDataService.saveContext()
+            }
+            print("Node added from CoreData!")
+            addNodeforTextClassification()
+            
+        }else if wordExists == true{
+            self.shouldProcessFrames = false
+            swiftMessages.displayNotification(layout: .cardView, title: "New Word", body: "Saved into Local Data", presentationStyle: .top, iconText: "✅", backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8))
+
+ 
+           translateTextToMalay(text2Translate: correctStr)
+            
+        }
+    }
+    
+  
     @IBOutlet weak var stopTestButton: PressableButton!
     @IBAction func stopTestButton(_ sender: Any) {
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
@@ -144,10 +346,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         userScores = userDefaults.array(forKey: "score") as! [Int]
         print(userScores)
         }
-        
     }
     @IBAction func modeToggleValueDidChange(sender: DGRunkeeperSwitch!) {
         selectedButtonIndex = sender.selectedIndex
+        if sender.selectedIndex == 1{
+            shouldProcessFrames = true
+            print("Started processing frames")
+            
+        }else{
+            startDetect.isHidden = false
+            stopDetect.isHidden = true
+        }
         print("valueChanged: \(sender.selectedIndex)")
     }
     @IBAction func langToggleValueDidChange(sender: DGRunkeeperSwitch!) {
@@ -173,51 +382,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
 
         }
     }
-    // The pixel buffer being held for analysis; used to serialize Vision requests.
-    private var currentBuffer: CVPixelBuffer?
-    private var currentFrame: ARFrame?
-    // Queue for dispatching vision classification requests
-    private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
-    
-    // Classification results
-    private var identifierString = ""
-    private var confidence: VNConfidence = 0.0
-    private var selectedButtonIndex = 0
-    var visionRequests = [VNRequest]()
-    
-    // Labels for classified objects by ARAnchor UUID
-    private var anchorLabels = [UUID: String]()
-    
-    var textMetadata = [Int: [Int: String]]()
-    
-    let textChecker = UITextChecker()
-    var correctStr: String = String()
-    private var confidenceThreshold: Double = 0.75
-    private var objectConfidenceThreshold: Double = 0.4
-    private var totConfidence: VNConfidence = 0.0
-    
-    var shouldProcessFrames = true
-    var ranFunctionTimer = false
-    var englishWord = ""
-    var malayWord = ""
-    var displayedAnswers: Bool = false
-    let bubbleDepth : Float = 0.01 // the 'depth' of 3D text
-    var flashOn = false
-    var nodePositions = [String: SCNVector3]()
-    var translationsCurrently = [String: String]()
-    //SwiftMessages Variables
-    var swiftMsgView: MessageView? = nil
-    var nodeAdded:Bool = false
-    var testScore:Int = 0
-    var learningModeEnabled = false
-    var tappedNodeName: String?
-    var prevResult:String?
-    var showImagePreview = false
-    var userScores:[Int] = []
-    // If false, test and translation is done from Malay to English. If true, test and translation is done from English to Malay
-    var malayEnglishToggle = false
-    //CoreData Model Array
-    var learntWords = [LearntWords]()
+  
     
     // The view controller that displays the status and "restart experience" UI.
     private lazy var statusViewController: StatusViewController = {
@@ -265,9 +430,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         totConfidence = 0.0
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
         view.addGestureRecognizer(tapGestureRecognizer)
-            //answerOne.isHidden = true
-      //  answerTwo.isHidden = true
-       // answerThree.isHidden = true
+        
         
         startTestButton.colors = .init(button: .green, shadow: .black)
         startTestButton.cornerRadius = 10
@@ -276,7 +439,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         stopTestButton.colors = .init(button: .red, shadow: .black)
         startTestButton.titleLabel?.text = "Stop Test"
         stopTestButton.isHidden = true
-        
+        stopDetect.isHidden = true
+        startDetect.isHidden = false
+        shouldProcessFrames = false
         let userDefaults = UserDefaults.standard
         if userDefaults.data(forKey: "score") != nil {
         userScores = userDefaults.array(forKey: "score") as! [Int]
@@ -358,7 +523,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
         
     }
-    
     func setupModeToggle(){
         let runkeeperSwitch2 = DGRunkeeperSwitch()
         runkeeperSwitch2.titles = ["Text", "Objects"]
@@ -387,6 +551,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         
         runkeeperSwitch2.addTarget(self, action: #selector(ViewController.langToggleValueDidChange(sender:)), for: .valueChanged )
     }
+    
     func setupScoreboard(){
        
         if (self.sceneView.defaultCameraController.pointOfView?.childNodes.isEmpty)!{
@@ -430,6 +595,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         self.sceneView.defaultCameraController.pointOfView?.addChildNode(node)
         
     }
+    
     @objc func handleTap(sender: UITapGestureRecognizer){
         let touchLocation = sender.location(in: sceneView)
         let hitTestResult = sceneView.hitTest(touchLocation, options: [:])
@@ -453,34 +619,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
 
     func showLearningModeText(){
-        self.swiftMsgView = MessageView.viewFromNib(layout: .statusLine)
-        self.swiftMsgView?.configureContent(title: "True!", body: "\((tappedNodeName)!)")
-        let iconText = "✅"
-        self.swiftMsgView?.configureTheme(backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8), foregroundColor: UIColor.white, iconImage: nil, iconText: iconText)
-        // self.swiftMsgView?.button?.setImage(Icon.errorSubtle.image, for: .normal)
-        self.swiftMsgView?.button?.setTitle("Hide", for: .normal)
-        self.swiftMsgView?.button?.backgroundColor = UIColor.clear
-        self.swiftMsgView?.button?.tintColor = UIColor.white
-        self.swiftMsgView?.configureDropShadow()
-        
-        //Config
-        var swiftConfig = SwiftMessages.defaultConfig
-        swiftConfig.interactiveHide = true
-        swiftConfig.presentationStyle = .top
-        swiftConfig.duration = .automatic
-        
-        //Show
-        SwiftMessages.show(config: swiftConfig, view: self.swiftMsgView!)
+        swiftMessages.displayNotification(layout: .statusLine, title: "True", body: "\((tappedNodeName)!)", presentationStyle: .top, iconText: "✅", backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8))
+
+   
         print("Learning Mode Node Touched")
     }
     
     private func restartSession(){
-        //   anchorLabels = [UUID: String]()
-        //statusViewController.cancelAllScheduledMessages()
         sceneView.delegate?.sessionInterruptionEnded!(sceneView.session)
         let configuration = ARWorldTrackingConfiguration()
         
-        //statusViewController.showMessage("RESTARTING SESSION")
     }
     
     
@@ -498,7 +646,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 defer { self.currentBuffer = nil }
                 self.currentBuffer = frame.capturedImage
                 self.convertPixelBuffer(cvPixelBuffer: self.currentBuffer!)
-                //try requestHandler.perform([self.classificationRequest])
                
             } catch {
                 print("Error: Vision request failed with error \"\(error)\"")
@@ -518,7 +665,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             uiImage = UIImage(cgImage: anImage)
         }
         if selectedButtonIndex == 0 {
-            self.detectText(image: uiImage!)}
+            if shouldProcessFrames == true{
+                
+                self.detectText(image: uiImage!)
+
+                
+            } else if shouldProcessFrames == false{
+                print("Frame processing halted!")
+            }
+            
+        }
         else if selectedButtonIndex == 1{
             if shouldProcessFrames == true{
                  DispatchQueue.main.async {
@@ -541,8 +697,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
 
                     }
 
-                   
-
                     DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: {
                         self.shouldProcessFrames = true
                         print("Restarted Processing Frames")
@@ -550,15 +704,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                         self.countdownLabel.isHidden = true
                     })
                     ranFunctionTimer = true
-                    
+
                 } else{
-                   
                     print("Wait for frames to restart processing")
                 }
-                
             }
-            
-            
         }
     }
     
@@ -620,8 +770,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                             for rectangleObservation in textObservation.characterBoxes! {
                                 let croppedImage = crop(image: image, rectangle: rectangleObservation)
                                 if let croppedImage = croppedImage {
-                                    let processedImage = preProcess(image: croppedImage)
-                                    self.classificationRequest(image: processedImage,
+                                    //let processedImage = preProcess(image: croppedImage)
+                                    
+                                    self.classificationRequest(image: croppedImage,
                                                                wordNumber: numberOfWords,
                                                                characterNumber: numberOfCharacters)
                                     numberOfCharacters += 1
@@ -659,11 +810,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     private func classificationRequest(image: UIImage, wordNumber: Int, characterNumber: Int){
         
+        let luminanceFilter = LuminanceThreshold()
+        luminanceFilter.threshold = 0.5
+        let processedImg = image.filterWithOperation(luminanceFilter)
         // Instantiate the model from its generated Swift class.
-        let model = try? VNCoreMLModel(for: Alphanum_28x28().model)
+        DispatchQueue.main.async {
+            
+            self.imagePreview.image = processedImg
+            
+        }
+        let model = try? VNCoreMLModel(for: OCR().model)
         let request = VNCoreMLRequest(model: model!) { [weak self] request, error in
             guard let results = request.results as? [VNClassificationObservation],
-                let topResult = results.first(where: {result in result.confidence > 0.5}) else {
+                let topResult = results.first(where: {result in result.confidence > 0.9}) else {
                     // fatalError("Unexpected result type from VNCoreMLRequest")
                     self?.identifierString = ""
                     return            }
@@ -671,23 +830,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let classificationInfo: [String: Any] = ["wordNumber" : wordNumber,
                                                      "characterNumber" : characterNumber,
                                                      "class" : result]
-            self?.totConfidence += topResult.confidence
-            let totConfidenceDouble = Double((self?.totConfidence)!)
-            let resultsCount = Double(results.count)
-            let avgConfidence = totConfidenceDouble/resultsCount
-            let averageConfidence = Double(avgConfidence)
-            if (averageConfidence > (self?.confidenceThreshold)!){
-                self?.shouldProcessFrames = false
-                print("Stopped Processing Frames")
-                self?.handleResult(classificationInfo)
-                
-                
-            }else{
-                self?.handleResult(classificationInfo)
-            }
-            
+         
+            self?.handleResult(classificationInfo)
+
         }
-        guard let ciImage = CIImage(image: image) else {
+        guard let ciImage = CIImage(image: processedImg) else {
             fatalError("Could not convert UIImage to CIImage :(")
         }
         // Crop input images to square area at center, matching the way the ML model was trained.
@@ -695,9 +842,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         
         // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
         request.usesCPUOnly = true
-        let orientation = CGImagePropertyOrientation(UIDevice.current.orientation)
+       // let orientation = CGImagePropertyOrientation(UIDevice.current.orientation)
         
-        let handler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
+        let handler = VNImageRequestHandler(ciImage: ciImage)
         DispatchQueue.global(qos: .userInteractive).async {
             do {
                 try handler.perform([request])
@@ -756,20 +903,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         for sortedKey in sortedKeys {
             result +=  word(fromDictionary: textMetadata[sortedKey]!) + " "
         }
-        /*    let misspelledRange = textChecker.rangeOfMisspelledWord(in: word(fromDictionary: textMetadata[sortedKey]!), range: NSRange(0..<word(fromDictionary: textMetadata[sortedKey]!).utf16.count), startingAt: 0, wrap: false, language: "en_US")
-         if misspelledRange.location != NSNotFound,
-         let guesses = textChecker.guesses(forWordRange: misspelledRange, in: word(fromDictionary: textMetadata[sortedKey]!), language: "en_US") {
-         correctStr = guesses.first!
-         print("Final Result: " + word(fromDictionary: textMetadata[sortedKey]!))
-         statusViewController.showMessage(correctStr)
-         print("Corrected Result: " + correctStr)
-         
-         }*/
-        print("here is the result" + result)
+        currentDetectedWord = result
+        
+        
         statusViewController.showMessage(result)
+
+         }
+    
+
         
-        
-    }
+    
     
     func word(fromDictionary dictionary: [Int : String]) -> String {
         let sortedKeys = dictionary.keys.sorted()
@@ -797,7 +940,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let rotatedImgFinal = uIImage.rotate(radians: .pi/2)
 
         DispatchQueue.main.async {
-            self.imagePreview.image = rotatedImgFinal
+            //self.imagePreview.image = rotatedImgFinal
 
         }
 
@@ -845,50 +988,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let trimmedEnglishWord = englishWordArray[0]
             self.englishWord = trimmedEnglishWord
             
-            for word in self.learntWords{
-                if word.englishword == trimmedEnglishWord{
-                    
-                    self.malayWord = word.malayword!
-                    //print("Word found in CoreData!")
-                    
-                    if self.prevResult == trimmedEnglishWord{
-                        
-                        print("Node already added")
-                    }else{
-                        self.translateTextToMalay(text2Translate: trimmedEnglishWord)
-                        self.addNodeForClassification()
-                        print("Word added from CoreData!")
-                        
-                    }
-                }
-            }
-        
+          
+            self.checkForObjectCoreData(objectName: trimmedEnglishWord)
             
-            
-            
-            if shouldTranslateWord == true{
-            if self.prevResult == trimmedEnglishWord{
-                print("Node already added")
-                shouldTranslateWord = false
-
-            }else{
-                shouldTranslateWord = false
-                self.prevResult = trimmedEnglishWord
-                self.translateTextToMalay(text2Translate: trimmedEnglishWord)
-                print("Word sent for translation")
-            
-            }
-            }
+       
         }
 
-        /*  self.totConfidence += topResult.confidence
-         let totConfidenceDouble = Double((self.totConfidence))
-         let resultsCount = Double(result.count)
-         let avgConfidence = totConfidenceDouble/resultsCount
-         let averageConfidence = Double(avgConfidence)
-         if (averageConfidence > (self.objectConfidenceThreshold)){
-         self.shouldProcessFrames = false
-         print("Stopped Processing Frames")*/
+        
         let englishWordArray = result.components(separatedBy: ", ")
         let trimmedEnglishWord = englishWordArray[0]
         self.englishWord = trimmedEnglishWord
@@ -898,43 +1004,50 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             print("Node already in AR Environment")
         }
         
-          /*  // Print Classifications
-            print(topResult.identifier)
-            
-            // Create a transform with a translation of 0.2 meters in front of the camera
-            var translation = matrix_identity_float4x4
-            translation.columns.3.z = -0.2
-            let transform = simd_mul(self.currentFrame!.camera.transform , translation)
-            
-            
-            // Add a new anchor to the session
-            let anchor = ARAnchor(transform: transform)
-            ARShared.shared.anchorsToIdentifiers[anchor] = topResult.identifier
-            
-            // Set the identifier
-            self.sceneView.session.add(anchor: anchor)*/
-           
         
-          //  print("Node Position: ", self.nodePositions.first)
-                
-
-            
-            // print("-------------")
-          
-
-
-            
-            // self.statusViewController.showMessage()
-            
-        
-        // }
         
         
         // Render Classifications
         
     }
-    
-    func addNodeForClassification(){
+    func addNodeforTextClassification(){
+        
+        var translation = matrix_identity_float4x4
+        translation.columns.3.z = -0.2
+        let transform = simd_mul(self.currentFrame!.camera.transform , translation)
+        
+        let worldCoord : SCNVector3 =  SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+        
+        // Create 3D Text
+        
+        if malayEnglishToggle == false{
+            let node : SCNNode = self.createNewBubbleParentNode(malayWord)
+            node.name = self.correctStr
+            //node.position = SCNVector3(0,0,-0.2)
+            node.position = worldCoord
+            self.nodePositions[self.correctStr] = node.position
+            self.sceneView.scene.rootNode.addChildNode(node)
+        } else if malayEnglishToggle == true {
+            let node : SCNNode = self.createNewBubbleParentNode(self.englishWord)
+            node.name = self.malayWord
+            node.position = worldCoord
+            //node.position = SCNVector3(0,0,-0.2)
+            
+            self.nodePositions[self.englishWord] = node.position
+            self.sceneView.scene.rootNode.addChildNode(node)
+          }
+        
+        //pointOfView?.addChildNode(node)
+        self.nodeAdded = false
+        //  print("Node Name: ", self.nodePositions.index(forKey: topResult.identifier))
+        for nodePos in self.nodePositions{
+            
+            print("Node Pos Key: ", nodePos.key)
+            print("Node Pos Value: ", nodePos.value)
+            
+        }
+    }
+    func addNodeForObjectClassification(){
         
         var translation = matrix_identity_float4x4
         translation.columns.3.z = -0.2
@@ -971,166 +1084,28 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             
         }
     }
-    func returnTranslatedText(text2Translate: String) -> (String){
-        
-            struct encodeText: Codable {
-                var text = String()
-            }
-            
-            let azureKey = "4ab01c02ee364f82ade642537439c4d3"
-            
-            let contentType = "application/json"
-            let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
-            let host = "dev.microsofttranslator.com"
-            let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=ms"
-            
-            
-        struct ReturnedJson: Codable {
-            var translations: [TranslatedStrings]
-        }
-        struct TranslatedStrings: Codable {
-            var text: String
-            var to: String
-        }
-        var langTranslations: Array<ReturnedJson?>? = nil
-        let jsonDecoder = JSONDecoder()
-            var encodeTextSingle = encodeText()
-            var toTranslate = [encodeText]()
-            encodeTextSingle.text = text2Translate
-            var noOfTranslations:Int = 0
-            toTranslate.append(encodeTextSingle)
-            
-            let encoder = JSONEncoder()
-            let jsonToTranslate = try? encoder.encode(toTranslate)
-            
-            let url = URL(string: apiURL)
-            var request = URLRequest(url: url!)
-            
-            request.httpMethod = "POST"
-            request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-            request.addValue(contentType, forHTTPHeaderField: "Content-Type")
-            request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
-            request.addValue(host, forHTTPHeaderField: "Host")
-            request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
-            request.httpBody = jsonToTranslate
-            
-            let config = URLSessionConfiguration.default
-            let session =  URLSession(configuration: config)
-            var resData: Data? = nil
-            let task = session.dataTask(with: request) { (responseData, response, responseError) in
-                
-                if responseError != nil {
-                    print("this is the error ", responseError!)
-                    
-                    let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
-                    
-                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    
-                    self.present(alert, animated: true)
-                    
-                }
-                langTranslations = try! jsonDecoder.decode(Array<ReturnedJson>.self, from: responseData!)
-                print("*****")
-                noOfTranslations = (langTranslations?.count)! - 1
-
-                resData = responseData
-            }
-            task.resume()
     
-
-        
-        
-            //*****TRANSLATION RETURNED DATA*****
-        
-        
-        
-            //Put response on main thread to update UI
-            
-        return langTranslations![0]!.translations[noOfTranslations].text
-    }
-    func translateTextToEnglish(text2Translate: String){
-        
-        struct encodeText: Codable {
-            var text = String()
-        }
-        
-        let azureKey = "4ab01c02ee364f82ade642537439c4d3"
-        
-        let contentType = "application/json"
-        let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
-        let host = "dev.microsofttranslator.com"
-        let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=ms"
-        
-        
-        
-        var encodeTextSingle = encodeText()
-        var toTranslate = [encodeText]()
-        encodeTextSingle.text = text2Translate
-        
-        toTranslate.append(encodeTextSingle)
-        
-        let encoder = JSONEncoder()
-        let jsonToTranslate = try? encoder.encode(toTranslate)
-        
-        let url = URL(string: apiURL)
-        var request = URLRequest(url: url!)
-        
-        request.httpMethod = "POST"
-        request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.addValue(traceID, forHTTPHeaderField: "X-ClientTraceID")
-        request.addValue(host, forHTTPHeaderField: "Host")
-        request.addValue(String(describing: jsonToTranslate?.count), forHTTPHeaderField: "Content-Length")
-        request.httpBody = jsonToTranslate
-        
-        let config = URLSessionConfiguration.default
-        let session =  URLSession(configuration: config)
-        
-        let task = session.dataTask(with: request) { (responseData, response, responseError) in
-            
-            if responseError != nil {
-                print("this is the error ", responseError!)
-                
-                let alert = UIAlertController(title: "Could not connect to service", message: "Please check your network connection and try again", preferredStyle: .actionSheet)
-                
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                
-                self.present(alert, animated: true)
-                
-            }
-            print("*****")
-            self.parseJson(jsonData: responseData!)
-        }
-        task.resume()
-    }
+  
     
     func translateTextToMalay(text2Translate: String){
-        
         struct encodeText: Codable {
             var text = String()
         }
-        
         let azureKey = "4ab01c02ee364f82ade642537439c4d3"
-        
         let contentType = "application/json"
         let traceID = "A14C9DB9-0DED-48D7-8BBE-C517A1A8DBB0"
         let host = "dev.microsofttranslator.com"
         let apiURL = "https://dev.microsofttranslator.com/translate?api-version=3.0&from=en&to=ms"
-        
-        
-        
         var encodeTextSingle = encodeText()
         var toTranslate = [encodeText]()
-        encodeTextSingle.text = text2Translate
         
+        encodeTextSingle.text = text2Translate
         toTranslate.append(encodeTextSingle)
         
         let encoder = JSONEncoder()
         let jsonToTranslate = try? encoder.encode(toTranslate)
-        
         let url = URL(string: apiURL)
         var request = URLRequest(url: url!)
-        
         request.httpMethod = "POST"
         request.addValue(azureKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
@@ -1183,88 +1158,36 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             //.components(separatedBy: ", ")
         let trimmedTranslatedWord = translatedWordArray
         
-        
         let wordModel = LearntWords(context: CoreDataService.context)
-        let englishWordsArr = self.englishWord.components(separatedBy: ", ")
-        let malayWordsArr = malayWord.components(separatedBy: ",")
-        wordModel.englishword = englishWordsArr[0]
-        wordModel.malayword = malayWordsArr[0]
-        translationsCurrently[englishWordsArr[0]] = malayWordsArr[0]
-        let detectedWord = learntWords.filter{ $0.englishword == wordModel.englishword }
-     
-            malayWord = trimmedTranslatedWord
-            addNodeForClassification()
-            
+        malayWord = trimmedTranslatedWord
+
+       
         
         
-        let wordExists = detectedWord.isEmpty
-        if wordExists == false{
-            
-            self.shouldProcessFrames = false
-            
-            if displayedAnswers == false{
+        
+        if selectedButtonIndex == 1{
+            wordModel.englishword = englishWord
+            wordModel.malayword = trimmedTranslatedWord
+            translationsCurrently[englishWord] = trimmedTranslatedWord
+            addNodeForObjectClassification()
                 
-                displayedAnswers = true
-                displayAnswers()
-            }
-         /*   print("Show user 3 answers to choose the correct one from....FALSE")
-            //Config view
-            self.swiftMsgView = MessageView.viewFromNib(layout: .cardView)
-            self.swiftMsgView?.configureContent(title: "False!", body: "Show user 3 answers to choose the correct one from.")
-            let iconText = "✅"
-            self.swiftMsgView?.configureTheme(backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8), foregroundColor: UIColor.white, iconImage: nil, iconText: iconText)
-            // self.swiftMsgView?.button?.setImage(Icon.errorSubtle.image, for: .normal)
-            self.swiftMsgView?.button?.setTitle("Hide", for: .normal)
-            self.swiftMsgView?.button?.backgroundColor = UIColor.clear
-            self.swiftMsgView?.button?.tintColor = UIColor.white
-            self.swiftMsgView?.configureDropShadow()
             
-            //Config
-            var swiftConfig = SwiftMessages.defaultConfig
-            swiftConfig.interactiveHide = true
-            swiftConfig.presentationStyle = .top
-            swiftConfig.duration = .automatic
-            
-            //Show
-            SwiftMessages.show(config: swiftConfig, view: self.swiftMsgView!)
-            */
-        }else if wordExists == true{
-            self.shouldProcessFrames = false
-            
-            
-            //Config view
-            self.swiftMsgView = MessageView.viewFromNib(layout: .cardView)
-            self.swiftMsgView?.configureContent(title: "True!", body: "This is a new word, so proceed with saving it into CoreData.")
-            let iconText = "✅"
-            self.swiftMsgView?.configureTheme(backgroundColor: UIColor.init(red: 0/255.0, green: 204.0/255.0, blue: 102.0/255.0, alpha: 0.8), foregroundColor: UIColor.white, iconImage: nil, iconText: iconText)
-            // self.swiftMsgView?.button?.setImage(Icon.errorSubtle.image, for: .normal)
-            self.swiftMsgView?.button?.setTitle("Hide", for: .normal)
-            self.swiftMsgView?.button?.backgroundColor = UIColor.clear
-            self.swiftMsgView?.button?.tintColor = UIColor.white
-            self.swiftMsgView?.configureDropShadow()
-            
-            //Config
-            var swiftConfig = SwiftMessages.defaultConfig
-            swiftConfig.interactiveHide = true
-            swiftConfig.presentationStyle = .top
-            swiftConfig.duration = .automatic
-            
-            //Show
-            SwiftMessages.show(config: swiftConfig, view: self.swiftMsgView!)
-            print("This is a new word, so proceed with saving it into CoreData....TRUE")
-         //   print("These are the Core Data words on top " + self.learntWords[0].englishword! + self.learntWords[0].malayword!)
-            
-            
-            self.learntWords.append(wordModel)
-            
-            self.saveToCoreData()
-        
+        }else{
+            wordModel.englishword = correctStr
+            wordModel.malayword = trimmedTranslatedWord
+            detectedTextTranslations[correctStr] = trimmedTranslatedWord
+            addNodeforTextClassification()
+
         }
-    
-        //-------------------------------Need to check CoreData for recognized object, if it exists, display options to choose correct answer, else add the word to CoreData and display translation.------------------------------
-      
         
-        //----------------------------------------------------------------------------------------//
+     
+        self.learntWords.append(wordModel)
+        CoreDataService.saveContext()
+        
+
+      
+    
+
     }
     
  
@@ -1275,25 +1198,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             self.statusViewController.showMessage("Malay:" + self.malayWord + " English: " + self.englishWord)
         }
     }
-   /* @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
-        // HIT TEST : REAL WORLD
-        // Get Screen Centre
-        let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
-        
-        let arHitTestResults : [ARHitTestResult] = sceneView.hitTest(screenCentre, types: [.featurePoint]) // Alternatively, we could use '.existingPlaneUsingExtent' for more grounded hit-test-points.
-        
-        if let closestResult = arHitTestResults.first {
-            // Get Coordinates of HitTest
-            let transform : matrix_float4x4 = closestResult.worldTransform
-            let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
-            
-            // Create 3D Text
-           // let node : SCNNode = createNewBubbleParentNode(englishWord)
-           // sceneView.scene.rootNode.addChildNode(node)
-           // node.position = worldCoord
-        }
-    }*/
-    
+ 
+    //CLASS
     func createNewBubbleParentNode(_ text : String) -> SCNNode {
         // Warning: Creating 3D Text is susceptible to crashing. To reduce chances of crashing; reduce number of polygons, letters, smoothness, etc.
         
@@ -1341,28 +1247,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     @IBOutlet var answerButtons: [UIButton]!
     
-    func displayAnswers(){
-        var randomWords1 = ["1","2","3","4","5"]
-        var randomWords2 = ["6","7","8","9","10"]
-        let shuffledRandomWords1 = randomWords1.shuffle()
-        let shuffledRandomWords2 = randomWords2.shuffle()
-        let malayWordArray = malayWord.components(separatedBy: ", ")
-        let trimmedMalayWord = malayWordArray[0]
-        let correctAnswer = "\(trimmedMalayWord)"
-        var answerList:[String] = ["\(correctAnswer)","\(shuffledRandomWords1.chooseOne)","\(shuffledRandomWords2.chooseOne)"]
-        var shuffledAnswerList = answerList.shuffle()
-            DispatchQueue.main.async {
-               
 
-                
-             
-                
-        }
-      
-        
-       
-        
-    }
     // MARK: - ARSKViewDelegate
     
     func view(_ view: ARSCNView, nodeFor anchor: ARAnchor) -> SKNode? {
@@ -1373,9 +1258,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
    
         let labelNode = SKLabelNode(text: "")
-      /*  labelNode.horizontalAlignmentMode = .center
-        labelNode.verticalAlignmentMode = .center
-        labelNode.fontName = UIFont.boldSystemFont(ofSize: 16).fontName*/
+   
         return labelNode
         
         
@@ -1428,22 +1311,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     
     // Show the classification results in the UI.
-   /*
-    
-    @IBAction func placeLabelAtLocation(sender: UITapGestureRecognizer){
-        let hitLocationInView = sender.location(in: sceneView)
-        let hitTestResults = sceneView.hitTest(hitLocationInView, types: [.featurePoint, .estimatedHorizontalPlane])
-        if let result = hitTestResults.first {
-            
-            // Add a new anchor at the tap location.
-            let anchor = ARAnchor(transform: result.worldTransform)
-            sceneView.session.add(anchor: anchor)
-            
-            // Track anchor ID to associate text with the anchor after ARKit creates a corresponding SKNode.
-            anchorLabels[anchor.identifier] = identifierString
-        }
-    }
-    */
+ 
     func view(_ view: ARSKView, didAdd node: SKNode, for anchor: ARAnchor) {
         guard let labelText = anchorLabels[anchor.identifier] else {
             fatalError("Missing Expected Associated Label For Anchor")
