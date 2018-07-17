@@ -153,23 +153,25 @@
                                     <action selector="testButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="R1f-4q-cdb"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bf6-2z-ELE">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bf6-2z-ELE">
                                 <rect key="frame" x="309" y="592" width="50" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal" title="🛑"/>
                                 <connections>
                                     <action selector="stopDetectButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="J9Q-ob-VYm"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zf7-al-vHt">
-                                <rect key="frame" x="309" y="592" width="50" height="49"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zf7-al-vHt">
+                                <rect key="frame" x="312" y="591" width="45" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="♻️"/>
                                 <connections>
                                     <action selector="startDetectButton:" destination="dSq-Iw-jw5" eventType="touchUpInside" id="ifW-zT-bJV"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGN-Dm-4bB">
+                                <rect key="frame" x="309" y="591" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -197,6 +199,7 @@
                     <connections>
                         <outlet property="blurView" destination="MMi-Kp-Qas" id="TTn-mM-Gvc"/>
                         <outlet property="countdownLabel" destination="LWj-g0-rr5" id="9y5-ZL-2Yt"/>
+                        <outlet property="detectButtonImage" destination="PGN-Dm-4bB" id="roG-6Y-RI0"/>
                         <outlet property="flashImage" destination="slm-dU-3Mw" id="tVY-HS-mxh"/>
                         <outlet property="flashToggleButton" destination="8Ch-KO-tG8" id="F3g-z1-I3X"/>
                         <outlet property="imagePreview" destination="FsH-1M-Tbd" id="JLN-WC-a6v"/>

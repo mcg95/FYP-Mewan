@@ -76,6 +76,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     
     
+    @IBOutlet weak var detectButtonImage: UIImageView!
     
     @IBOutlet weak var imagePreview: UIImageView!
     
@@ -236,6 +237,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         shouldProcessFrames = true
         stopDetect.isHidden = false
         startDetect.isHidden = true
+        detectButtonImage.image = #imageLiteral(resourceName: "PauseScan")
     }
     @IBOutlet weak var stopDetect: UIButton!
     
@@ -245,6 +247,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             stopDetect.isHidden = true
             startDetect.isHidden = false
         self.shouldProcessFrames = false
+        detectButtonImage.image = #imageLiteral(resourceName: "StartScan")
         let textChecker = UITextChecker()
         let misspelledRange = textChecker.rangeOfMisspelledWord(
             in: result, range: NSRange(0..<result.count), startingAt: 0, wrap: false, language: "en_US")
@@ -350,10 +353,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBAction func modeToggleValueDidChange(sender: DGRunkeeperSwitch!) {
         selectedButtonIndex = sender.selectedIndex
         if sender.selectedIndex == 1{
-            shouldProcessFrames = true
+            shouldProcessFrames = false
             print("Started processing frames")
-            
+            startDetect.isHidden = false
+            stopDetect.isHidden = true
         }else{
+            shouldProcessFrames = false
             startDetect.isHidden = false
             stopDetect.isHidden = true
         }
@@ -454,6 +459,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         countdownLabel.isHidden = true
         flashImage.image = #imageLiteral(resourceName: "flashOff")
         imagePreview.isHidden = true
+        detectButtonImage.image = #imageLiteral(resourceName: "StartScan")
         setupSlideInMenu()
         guard let objectModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("can't load Object model")
@@ -684,7 +690,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 
                 
             } else if shouldProcessFrames == false{
-                if ranFunctionTimer == false {
+                DispatchQueue.main.async {
+                    self.detectButtonImage.image = #imageLiteral(resourceName: "StartScan")
+                    self.startDetect.isHidden = false
+                    self.stopDetect.isHidden = true
+                }
+               
+               /* if ranFunctionTimer == false {
                     DispatchQueue.main.async {
                         self.countdownLabel.isHidden = false
                         self.countdownLabel.timerFinishingText = "Restarted"
@@ -707,7 +719,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
 
                 } else{
                     print("Wait for frames to restart processing")
-                }
+                }*/
             }
         }
     }
