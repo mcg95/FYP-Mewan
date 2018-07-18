@@ -1,0 +1,43 @@
+PODS:
+  - DGRunkeeperSwitch (1.1.4)
+  - GPUImage2 (0.1.0)
+  - SRCountdownTimer (1.1)
+  - SwiftMessages (4.1.4):
+    - SwiftMessages/App (= 4.1.4)
+  - SwiftMessages/App (4.1.4)
+  - SwiftyButton (0.8.0)
+
+DEPENDENCIES:
+  - DGRunkeeperSwitch (from `https://github.com/alexanderkhitev/DGRunkeeperSwitch`)
+  - GPUImage2 (from `./GPUImage2.podspec`)
+  - SRCountdownTimer
+  - SwiftMessages
+  - SwiftyButton
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - SRCountdownTimer
+    - SwiftMessages
+    - SwiftyButton
+
+EXTERNAL SOURCES:
+  DGRunkeeperSwitch:
+    :git: https://github.com/alexanderkhitev/DGRunkeeperSwitch
+  GPUImage2:
+    :podspec: "./GPUImage2.podspec"
+
+CHECKOUT OPTIONS:
+  DGRunkeeperSwitch:
+    :commit: 2916ed50f8c57efc5f9b31867f41f9a670abe76a
+    :git: https://github.com/alexanderkhitev/DGRunkeeperSwitch
+
+SPEC CHECKSUMS:
+  DGRunkeeperSwitch: cc237936f42237307f5e212e18136a27bf907bf1
+  GPUImage2: 944e94cc5a331a60c299d1a620e2b535903b8458
+  SRCountdownTimer: 9c92e444b5403c92f01dd6610299b8c634bc8562
+  SwiftMessages: 2c33fdee8b8f38dfc7e1036684456b505891da8c
+  SwiftyButton: 093e3fe2becf3ae31c0f6c1c6987b79a93fb3ecb
+
+PODFILE CHECKSUM: 42e642a1d49e02886bde4da27635b2b2ceb8f909
+
+COCOAPODS: 1.5.0
