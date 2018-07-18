@@ -178,6 +178,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     @IBAction func stopDetectButton(_ sender: Any) {
+        if currentDetectedWord != nil{
         var result: String = (currentDetectedWord?.lowercased())!
         
         stopDetect.isHidden = true
@@ -202,7 +203,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             
         }
         textMetadata.removeAll()
-
+        }else{
+            swiftMessages.displayNotification(layout: .cardView, title: "No object detected!", body: "Detection stopped before object detection", presentationStyle: .bottom, iconText: "‼️", backgroundColor: UIColor.init(red: 255, green: 0, blue: 0, alpha: 0.8))
+            
+            stopDetect.isHidden = true
+            startDetect.isHidden = false
+            self.shouldProcessFrames = false
+            detectButtonImage.image = #imageLiteral(resourceName: "StartScan")
+        }
     }
     
     @IBAction func testButton(_ sender: Any) {
@@ -530,7 +538,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     func setupScoreboard(){
-       
         if (self.sceneView.defaultCameraController.pointOfView?.childNodes.isEmpty)!{
             let worldCoord : SCNVector3 =  (self.sceneView.defaultCameraController.pointOfView?.position)!
             
@@ -545,9 +552,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }else {
              self.sceneView.defaultCameraController.pointOfView?.childNodes.filter({ $0.name == "Scoreboard" }).forEach({ $0.removeFromParentNode() })
             
-            
             let worldCoord : SCNVector3 =  (self.sceneView.defaultCameraController.pointOfView?.position)!
-            
             
             let node : SCNNode = self.newARNode("Score: \(String(testScore))")
            // node.position = SCNVector3(worldCoord.x + 0.3, worldCoord.y, worldCoord.z - 1)
@@ -662,7 +667,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                  DispatchQueue.main.async {
                     
                 }
-                setupVision()
+                setupObjectClassificationRequest()
                 
                 
             } else if shouldProcessFrames == false{
@@ -740,9 +745,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let processedImg = image.filterWithOperation(luminanceFilter)
         // Instantiate the model from its generated Swift class.
         DispatchQueue.main.async {
-            
             self.imagePreview.image = processedImg
-            
         }
         let model = try? VNCoreMLModel(for: OCR().model)
         let request = VNCoreMLRequest(model: model!) { [weak self] request, error in
@@ -763,11 +766,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
         // Crop input images to square area at center, matching the way the ML model was trained.
         request.imageCropAndScaleOption = .centerCrop
-        
         // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
         request.usesCPUOnly = true
        // let orientation = CGImagePropertyOrientation(UIDevice.current.orientation)
-        
         let handler = VNImageRequestHandler(ciImage: ciImage)
         DispatchQueue.global(qos: .userInteractive).async {
             do {
@@ -777,7 +778,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 print(error)
             }
         }
-        
     }
     
     
@@ -851,7 +851,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     //Object Detection Model
     
-    func setupVision() {
+    func setupObjectClassificationRequest() {
         let model = try? VNCoreMLModel(for: Inceptionv3().model)
         let classificationRequest = VNCoreMLRequest(model: model! , completionHandler: classificationCompleteHandler)
         classificationRequest.imageCropAndScaleOption = VNImageCropAndScaleOption.centerCrop // Crop from centre of images and scale to appropriate size.
@@ -1082,7 +1082,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         
         let wordModel = LearntWords(context: CoreDataService.context)
         malayWord = trimmedTranslatedWord
-
+        
        
         
         
@@ -1171,8 +1171,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 if word.malayword == nil{
                     
                 }else{
+                    if objectName == word.englishword{
                     malayWord = word.malayword!
                     englishWord = word.englishword!
+                    translationsCurrently[englishWord] = word.malayword!
+
+                    }
                 }
             }
             
