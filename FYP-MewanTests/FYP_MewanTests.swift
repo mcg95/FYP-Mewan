@@ -26,61 +26,52 @@ class FYP_MewanTests: XCTestCase {
         super.tearDown()
     }
     var learntWords = [LearntWords]()
-    func testAddingToCache(){
+    func testAddingToCoreData(){
         fetchLearntWordsCoreData()
-        let promise = expectation(description: "TestWord")
-        var wordToAdd = "TestWord"
-        var stringFromCoreData: String?
+        let promise = expectation(description: "TestWord1")
+        let wordToAdd = "TestWord1"
         let wordModel = LearntWords(context: CoreDataService.context)
-        let detectedWord = learntWords.filter{ $0.englishword == "TestWord" }
+        let detectedWord = learntWords.filter{ $0.englishword == wordToAdd }
         let wordExists = detectedWord.isEmpty
         if wordExists == false{
-            
+            print("Word Exists! Try a new word.")
         }else{
             
-            wordModel.englishword = "TestWord"
-            wordModel.malayword = "TestWord"
+            wordModel.englishword = wordToAdd
+            wordModel.malayword = wordToAdd
             print("Word added to CoreData.")
-            promise.fulfill()
             learntWords.append(wordModel)
             CoreDataService.saveContext()
+            
+            fetchLearntWordsCoreData()
+            for word in learntWords{
+                if word.englishword == wordToAdd{
+                    print(word.englishword)
+                    promise.fulfill()
+
+                }
+            }
+
         }
         
         waitForExpectations(timeout: 4, handler: nil)
     }
     
-    func testLoadingFromCache(){
+    func testLoadingFromCoreData(){
         fetchLearntWordsCoreData()
         let promise = expectation(description: "iPod")
-        let wordToCheckFor = ["iPod","IPOD"]
-        var wordInCoreData = "iPod"
-        var stringFromCoreData: String?
-        let wordModel = LearntWords(context: CoreDataService.context)
         let detectedWord = learntWords.filter{ $0.englishword == "iPod" }
         let wordExists = detectedWord.isEmpty
         if wordExists == false{
             
             for word in learntWords{
-                print(word.englishword)
                 if word.englishword == "iPod"{
-                    stringFromCoreData = word.englishword
-                    print("String from Core Data ", stringFromCoreData)
                     promise.fulfill()
                 }
             }
             
-        }else{
-            
-            for word in learntWords{
-                print("English Word: ",word.englishword)
-            }
-         
         }
-       /* wordModel.englishword = "UnitTest"
-        wordModel.malayword = "Ujian Unit"
-        print("Word added to CoreData.")
-        learntWords.append(wordModel)
-        CoreDataService.saveContext()*/
+       
         waitForExpectations(timeout: 4, handler: nil)
     }
     func fetchLearntWordsCoreData(){
